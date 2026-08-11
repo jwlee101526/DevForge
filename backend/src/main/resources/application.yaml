@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: devforge
+
+  datasource:
+    url: jdbc:sqlite:${DEVFORGE_DB_PATH:./data/devforge.db}
+    driver-class-name: org.sqlite.JDBC
+
+  jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: non_null
+
+server:
+  port: 8080
+
+cors:
+  allowed-origin: http://localhost:5173
+
+ai-provider:
+  default-provider: Antigravity
+  antigravity:
+    executable-path: agy
+    output-format: json
+    timeout-seconds: 300
+    log-file: ${ANTIGRAVITY_LOG_FILE:./build/antigravity-cli.log}
+    auto-configure-permissions: ${ANTIGRAVITY_AUTO_CONFIGURE_PERMISSIONS:true}
+    shared-config-path: ${ANTIGRAVITY_SHARED_CONFIG_PATH:}
+    permission-allow:
+      - command(agy --help)
+    env:
+      GEMINI_API_KEY: ${GEMINI_API_KEY:}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:}
+      GOOGLE_APPLICATION_CREDENTIALS: ${GOOGLE_APPLICATION_CREDENTIALS:}
+      ANTIGRAVITY_API_KEY: ${ANTIGRAVITY_API_KEY:}
+
+logging:
+  level:
+    com.rmrdo.devforge: DEBUG
+    org.hibernate.SQL: DEBUG
