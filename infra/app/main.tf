@@ -3,7 +3,7 @@ locals {
   resource_prefix    = "${local.normalized_project}-${var.environment}"
   jar_name           = basename(var.package_path)
   agy_path           = "/home/.local/bin/agy"
-  startup_command    = "sh /home/site/wwwroot/BOOT-INF/classes/startup.sh"
+  startup_command    = "cd /tmp && jar xf /home/site/wwwroot/${local.jar_name} BOOT-INF/classes/startup.sh && sh BOOT-INF/classes/startup.sh"
 
   default_app_settings = {
     AI_PROVIDER_DEFAULT                 = "Antigravity"
