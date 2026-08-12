@@ -14,11 +14,14 @@ public record QuizGenerateRequest(
         String savedTo,
         String instruction,
         int questionCount,
-        Map<String, Integer> questionTypeCounts
+        Map<String, Integer> questionTypeCounts,
+        List<String> techStacks,
+        String difficulty
 ) {
     public QuizGenerateRequest {
         if (mode == null) mode = "random";
         if (tag == null) tag = "";
         if (questionCount <= 0) questionCount = 10;
+        if (difficulty == null || difficulty.isBlank()) difficulty = "medium";
     }
 }

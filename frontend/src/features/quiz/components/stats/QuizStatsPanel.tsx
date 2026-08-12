@@ -6,6 +6,7 @@ import { HighIncorrectRateConceptsChart } from "./HighIncorrectRateConceptsChart
 import { MostMissedConceptsChart } from "./MostMissedConceptsChart";
 import { RecentQuizHistory } from "./RecentQuizHistory";
 import { ReportHeader } from "./ReportHeader";
+import { WeaknessAnalysisPanel } from "./WeaknessAnalysisPanel";
 
 export interface QuizStatsPanelProps {
   statsQuery?: {
@@ -123,6 +124,8 @@ export const QuizStatsPanel: React.FC<QuizStatsPanelProps> = ({
           <HighIncorrectRateConceptsChart data={highIncorrectRateData} />
         </ChartCard>
       </div>
+
+      <WeaknessAnalysisPanel />
 
       <RecentQuizHistory
         sessions={recentSessions}

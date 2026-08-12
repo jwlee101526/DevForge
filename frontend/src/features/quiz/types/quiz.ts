@@ -22,6 +22,35 @@ export interface QuizGoal {
   instruction: string;
   question_count: number;
   question_type_counts: QuestionTypeCounts;
+  tech_stacks?: string[];
+  difficulty?: "beginner" | "easy" | "medium" | "hard" | "expert" | string;
+}
+
+export interface WeaknessConcept {
+  word: string;
+  korean?: string;
+  tag?: string;
+  attemptCount: number;
+  incorrectCount: number;
+  incorrectRate: number;
+  accuracy: number;
+}
+
+export interface WeaknessType {
+  questionType: string;
+  label: string;
+  count: number;
+  incorrectCount: number;
+  incorrectRate: number;
+}
+
+export interface WeaknessAnalytics {
+  totalAttemptedCount: number;
+  totalIncorrectCount: number;
+  overallIncorrectRate: number;
+  frequentIncorrectConcepts: WeaknessConcept[];
+  weakQuestionTypes: WeaknessType[];
+  recommendedReviewKeywords: string[];
 }
 
 export interface Choice {

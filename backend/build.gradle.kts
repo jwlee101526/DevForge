@@ -36,6 +36,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
+    // OpenAPI & Scalar
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.8.5")
+
     // SQLite
     runtimeOnly("org.xerial:sqlite-jdbc")
     implementation("org.hibernate.orm:hibernate-community-dialects")

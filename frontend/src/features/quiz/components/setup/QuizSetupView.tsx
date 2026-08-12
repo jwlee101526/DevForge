@@ -7,6 +7,7 @@ import { QuizLoadingOverlay } from "./QuizLoadingOverlay";
 import { QuizScopeSection } from "./QuizScopeSection";
 import { QuizTypeOptionSection } from "./QuizTypeOptionSection";
 import { SetupSection } from "./SetupSection";
+import { TechStackDifficultySection } from "./TechStackDifficultySection";
 import { useQuizSetupState } from "../../hooks/useQuizSetupState";
 
 export interface QuizSetupViewProps {
@@ -80,6 +81,12 @@ export const QuizSetupView: React.FC<QuizSetupViewProps> = ({
                 <span className="ml-1 text-sm font-bold text-slate-400">/ {totalItems.toLocaleString()}개</span>
               </div>
             </div>
+
+            <TechStackDifficultySection
+              goal={goal}
+              setGoalValue={setGoalValue}
+              disabled={controlsDisabled}
+            />
 
             <QuizScopeSection
               goal={goal}

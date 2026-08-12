@@ -12,6 +12,7 @@ import com.rmrdo.devforge.application.port.AiProviderFactory;
 import com.rmrdo.devforge.application.service.ConceptService;
 import com.rmrdo.devforge.application.service.QuizService;
 import com.rmrdo.devforge.application.service.StatsService;
+import com.rmrdo.devforge.application.service.WeaknessService;
 import com.rmrdo.devforge.infrastructure.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ public class QuizController {
     private final QuizService quizService;
     private final ConceptService conceptService;
     private final StatsService statsService;
+    private final WeaknessService weaknessService;
     private final AiProviderFactory providerFactory;
     private final JwtTokenProvider tokenProvider;
 
@@ -53,6 +55,13 @@ public class QuizController {
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         UUID userId = extractUserId(authHeader);
         return ResponseEntity.ok(statsService.getStats(start, end, userId));
+    }
+
+    @GetMapping("/weaknesses")
+    public ResponseEntity<com.rmrdo.devforge.application.dto.response.WeaknessAnalyticsDto> getWeaknesses(
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        UUID userId = extractUserId(authHeader);
+        return ResponseEntity.ok(weaknessService.getWeaknessAnalytics(userId));
     }
 
     @PostMapping("/generate")

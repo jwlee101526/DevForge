@@ -44,6 +44,12 @@ public class AntigravityPromptFactory {
             scopeDesc = String.join(", ", parts);
         }
 
+        String techStackDesc = (request.techStacks() != null && !request.techStacks().isEmpty())
+                ? String.join(", ", request.techStacks())
+                : "전체 선택 (Java, Python, JS, Backend, Frontend, OS, DB, 자료구조 등)";
+
+        String targetDifficulty = request.difficulty() != null ? request.difficulty() : "medium";
+
         String customInstruction = (request.instruction() != null && !request.instruction().isEmpty())
                 ? "\n\n추가 지시사항: " + request.instruction()
                 : "";
@@ -55,6 +61,8 @@ public class AntigravityPromptFactory {
 사용자에게 추가 질문을 하지 마세요. 요구사항에 맞춰 퀴즈를 생성하세요.
 
 ## 요구사항
+- 지정 기술 스택 / 태그: %s
+- 선택 목표 난이도: %s (beginner, easy, medium, hard, expert 중 조율)
 - 범위: %s
 - 문제 구성: %s
 - 총 문제 수: %d
@@ -98,9 +106,9 @@ public class AntigravityPromptFactory {
 1. id는 q1, q2, q3... 순서로 부여
 2. 4지선다의 choices id는 A, B, C, D
 3. 주관식(short_answer, sentence_answer)은 choices를 빈 배열 []로
-4. difficulty는 easy, medium, hard, challenge 중 하나
+4. difficulty는 5단계 중 선택: beginner (⭐1), easy (⭐2), medium (⭐3), hard (⭐4), expert (⭐5)
 5. passage는 context_choice, usage_choice, sentence_answer에 적극적으로 포함하고, 없으면 null
-6. 개발 지식(Java, Spring, React, DB, OS, 네트워크, 알고리즘 등) 기반 문제를 생성
+6. 지정된 기술 스택(%s) 중심의 실무 개발 지식 기반 문제를 생성
 7. 각 문제의 target_word는 모두 다르게 작성
 8. 같은 prompt, 같은 선택지 조합, 같은 정답 패턴을 반복하지 않기
 9. 선택지는 모두 그럴듯해야 하며 명백한 농담, 범위 밖 기술, 무의미한 선택지를 넣지 않기
@@ -108,7 +116,7 @@ public class AntigravityPromptFactory {
 11. 주관식은 correct_text를 반드시 포함하고 correct_choice_id는 null
 12. explanation은 정답 근거와 핵심 오개념을 포함
 13. 정답 필드는 서버가 분리 저장하므로 문제 품질을 위해 반드시 포함
-""".formatted(scopeDesc, typeCountsDesc, request.questionCount(), customInstruction);
+""".formatted(techStackDesc, targetDifficulty, scopeDesc, typeCountsDesc, request.questionCount(), customInstruction, techStackDesc);
     }
 
     /** 기본 프롬프트가 실패했을 때 사용하는 짧은 재시도 프롬프트를 만든다. */

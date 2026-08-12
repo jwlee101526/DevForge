@@ -30,6 +30,7 @@ public class QuizService {
     private final AiProviderFactory providerFactory;
     private final QuizSessionRepository sessionRepository;
     private final ObjectMapper objectMapper;
+    private final WeaknessService weaknessService;
 
     @Transactional
     public QuizGenerateResponse generateQuiz(QuizGenerateRequest request) {
@@ -103,6 +104,9 @@ public class QuizService {
             targetSession.setCompletedAt(LocalDateTime.now());
             sessionRepository.save(targetSession);
             sessionIdStr = targetSession.getId().toString();
+
+            /** 채점 후 오답 개념 및 키워드를 집계하여 사용자 약점 데이터를 수집·업데이트한다. */
+            weaknessService.recordQuizResults(targetSession, result);
         }
 
         return new QuizGradeResponse(sessionIdStr, result.score(), result.typeStats(), result.results());

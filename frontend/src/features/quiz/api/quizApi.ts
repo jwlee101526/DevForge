@@ -94,3 +94,6 @@ export const defaultFetchSessionApi = async (
   answers?: Record<string, UserAnswer> | UserAnswerSubmission[];
   grade_result?: GradeResult | null;
 }> => apiFetch(`/quiz/sessions/${sessionId}`);
+
+export const defaultFetchWeaknessApi = async (): Promise<import("../types/quiz").WeaknessAnalytics> =>
+  apiFetch("/quiz/weaknesses");
