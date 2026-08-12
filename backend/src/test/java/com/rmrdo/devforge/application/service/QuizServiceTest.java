@@ -28,7 +28,8 @@ class QuizServiceTest {
         AiProviderFactory providerFactory = mock(AiProviderFactory.class);
         QuizSessionRepository sessionRepository = mock(QuizSessionRepository.class);
         ObjectMapper objectMapper = new ObjectMapper();
-        QuizService service = new QuizService(providerFactory, sessionRepository, objectMapper);
+        WeaknessService weaknessService = mock(WeaknessService.class);
+        QuizService service = new QuizService(providerFactory, sessionRepository, objectMapper, weaknessService);
 
         QuizSession session = new QuizSession();
         session.setId(UUID.randomUUID());

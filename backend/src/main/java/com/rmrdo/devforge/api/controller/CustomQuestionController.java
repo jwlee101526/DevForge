@@ -35,9 +35,10 @@ public class CustomQuestionController {
 
     private UUID extractUserId(String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return null;
+            return UUID.fromString("00000000-0000-0000-0000-000000000000");
         }
         String token = authHeader.substring(7);
-        return tokenProvider.getUserIdFromToken(token);
+        UUID userId = tokenProvider.getUserIdFromToken(token);
+        return userId != null ? userId : UUID.fromString("00000000-0000-0000-0000-000000000000");
     }
 }

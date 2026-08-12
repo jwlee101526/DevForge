@@ -205,7 +205,9 @@ class AntigravityCliProviderTest {
                 null,
                 "Optional 1문제",
                 1,
-                Map.of("meaning_choice", 1)
+                Map.of("meaning_choice", 1),
+                List.of("Java"),
+                "medium"
         );
     }
 
@@ -221,7 +223,9 @@ class AntigravityCliProviderTest {
                 null,
                 "Optional %d문제".formatted(count),
                 count,
-                Map.of("meaning_choice", count)
+                Map.of("meaning_choice", count),
+                List.of("Java"),
+                "medium"
         );
     }
 
