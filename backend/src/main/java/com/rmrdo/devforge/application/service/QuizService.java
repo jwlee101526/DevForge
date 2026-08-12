@@ -1,9 +1,8 @@
 package com.rmrdo.devforge.application.service;
 
-import tools.jackson.core.JacksonException;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rmrdo.devforge.application.dto.request.QuizGenerateRequest;
 import com.rmrdo.devforge.application.dto.request.QuizGradeRequest;
 import com.rmrdo.devforge.application.dto.response.QuestionDto;
@@ -31,6 +30,7 @@ public class QuizService {
     private final QuizSessionRepository sessionRepository;
     private final ObjectMapper objectMapper;
     private final WeaknessService weaknessService;
+    private final QuizGradingService quizGradingService;
 
     @Transactional
     public QuizGenerateResponse generateQuiz(QuizGenerateRequest request) {
@@ -55,7 +55,7 @@ public class QuizService {
         try {
             session.setQuestionsJson(objectMapper.writeValueAsString(result.questions()));
             session.setAnswerKeyJson(result.answerToken());
-        } catch (JacksonException e) {
+        } catch (Exception e) {
             log.error("Failed to serialize questions to JSON", e);
             session.setQuestionsJson("[]");
         }
@@ -98,7 +98,7 @@ public class QuizService {
             try {
                 targetSession.setAnswersJson(objectMapper.writeValueAsString(request.answers()));
                 targetSession.setGradeResultJson(objectMapper.writeValueAsString(result));
-            } catch (JacksonException e) {
+            } catch (Exception e) {
                 log.error("Failed to serialize grade results for session {}", targetSession.getId(), e);
             }
             targetSession.setCompletedAt(LocalDateTime.now());

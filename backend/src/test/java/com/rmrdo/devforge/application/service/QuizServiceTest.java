@@ -7,7 +7,7 @@ import com.rmrdo.devforge.domain.entity.QuizSession;
 import com.rmrdo.devforge.infrastructure.persistence.QuizSessionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Pageable;
-import tools.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,7 +29,8 @@ class QuizServiceTest {
         QuizSessionRepository sessionRepository = mock(QuizSessionRepository.class);
         ObjectMapper objectMapper = new ObjectMapper();
         WeaknessService weaknessService = mock(WeaknessService.class);
-        QuizService service = new QuizService(providerFactory, sessionRepository, objectMapper, weaknessService);
+        QuizGradingService gradingService = new QuizGradingService(objectMapper);
+        QuizService service = new QuizService(providerFactory, sessionRepository, objectMapper, weaknessService, gradingService);
 
         QuizSession session = new QuizSession();
         session.setId(UUID.randomUUID());

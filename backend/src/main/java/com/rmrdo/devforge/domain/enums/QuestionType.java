@@ -1,17 +1,31 @@
 package com.rmrdo.devforge.domain.enums;
 
-/** 퀴즈에서 제공하는 문제 유형을 정의한다. */
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
+/** 퀴즈 문제 유형 도메인 열거형 */
 public enum QuestionType {
-    /** 개념의 의미를 고르는 4지선다 문제. */
-    MEANING_CHOICE,
-    /** 코드나 문맥에 알맞은 답을 고르는 문제. */
-    CONTEXT_CHOICE,
-    /** 함께 사용되는 기술이나 개념 조합을 고르는 문제. */
-    COLLOCATION_CHOICE,
-    /** 실제 사용법이나 적용 방법을 고르는 문제. */
-    USAGE_CHOICE,
-    /** 짧은 답을 작성하는 주관식 문제. */
-    SHORT_ANSWER,
-    /** 문장 형태로 답을 작성하는 서술형 문제. */
-    SENTENCE_ANSWER
+
+    MEANING_CHOICE("meaning_choice", "개념/용어 사지선다", "choice"),
+    CONTEXT_CHOICE("context_choice", "코드 빈칸 사지선다", "choice"),
+    COLLOCATION_CHOICE("collocation_choice", "키워드/조합 사지선다", "choice"),
+    USAGE_CHOICE("usage_choice", "실무 활용 코드 사지선다", "choice"),
+    SHORT_ANSWER("short_answer", "단답형 주관식", "short_answer"),
+    SENTENCE_ANSWER("sentence_answer", "코드/서술형 주관식", "sentence_answer");
+
+    private final String code;
+    private final String koreanTitle;
+    private final String answerFormat;
+
+    public static QuestionType fromCode(String code) {
+        if (code == null) return MEANING_CHOICE;
+        for (QuestionType type : values()) {
+            if (type.code.equalsIgnoreCase(code.trim())) {
+                return type;
+            }
+        }
+        return MEANING_CHOICE;
+    }
 }

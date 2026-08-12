@@ -6,28 +6,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import AppSidebar from "@/components/layout/AppSidebar";
 import CodePassage from "@/features/quiz/components/practice/CodePassage";
-
-interface BookmarkGroupItem {
-  id: string;
-  name: string;
-  description?: string;
-  color?: string;
-  count?: number;
-}
-
-interface BookmarkedQuestionItem {
-  id: string;
-  groupId?: string;
-  questionId: string;
-  questionType?: string;
-  targetWord?: string;
-  prompt?: string;
-  questionJson: string;
-}
+import {
+  createBookmarkGroupApi,
+  deleteBookmarkApi,
+  deleteBookmarkGroupApi,
+  fetchBookmarkGroupsApi,
+  fetchBookmarkedQuestionsApi,
+} from "@/features/api/bookmarkApi";
+import type { BookmarkGroupDto, BookmarkedQuestionDto } from "@/features/api/bookmarkApi";
 
 export const BookmarkManagementPage: React.FC = () => {
-  const [groups, setGroups] = useState<BookmarkGroupItem[]>([]);
-  const [bookmarks, setBookmarks] = useState<BookmarkedQuestionItem[]>([]);
+  const [groups, setGroups] = useState<BookmarkGroupDto[]>([]);
+  const [bookmarks, setBookmarks] = useState<BookmarkedQuestionDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   const [newGroupName, setNewGroupName] = useState("");
@@ -37,8 +27,8 @@ export const BookmarkManagementPage: React.FC = () => {
     setLoading(true);
     try {
       const [groupsRes, bookmarksRes] = await Promise.all([
-        fetch("/api/bookmarks/groups").then((r) => (r.ok ? r.json() : [])),
-        fetch("/api/bookmarks").then((r) => (r.ok ? r.json() : [])),
+        fetchBookmarkGroupsApi().catch(() => []),
+        fetchBookmarkedQuestionsApi().catch(() => []),
       ]);
       setGroups(groupsRes || []);
       setBookmarks(bookmarksRes || []);
@@ -57,16 +47,10 @@ export const BookmarkManagementPage: React.FC = () => {
     e.preventDefault();
     if (!newGroupName.trim()) return;
     try {
-      const res = await fetch("/api/bookmarks/groups", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: newGroupName.trim(), description: newGroupDesc.trim() }),
-      });
-      if (res.ok) {
-        setNewGroupName("");
-        setNewGroupDesc("");
-        fetchBookmarkData();
-      }
+      await createBookmarkGroupApi(newGroupName.trim(), newGroupDesc.trim());
+      setNewGroupName("");
+      setNewGroupDesc("");
+      fetchBookmarkData();
     } catch (err) {
       console.error("Failed to create group", err);
     }
@@ -75,11 +59,9 @@ export const BookmarkManagementPage: React.FC = () => {
   const handleDeleteGroup = async (groupId: string) => {
     if (!confirm("이 책갈피 그룹을 삭제하시겠습니까?")) return;
     try {
-      const res = await fetch(`/api/bookmarks/groups/${groupId}`, { method: "DELETE" });
-      if (res.ok) {
-        if (selectedGroupId === groupId) setSelectedGroupId(null);
-        fetchBookmarkData();
-      }
+      await deleteBookmarkGroupApi(groupId);
+      if (selectedGroupId === groupId) setSelectedGroupId(null);
+      fetchBookmarkData();
     } catch (err) {
       console.error("Failed to delete group", err);
     }
@@ -87,8 +69,8 @@ export const BookmarkManagementPage: React.FC = () => {
 
   const handleDeleteBookmark = async (bookmarkId: string) => {
     try {
-      const res = await fetch(`/api/bookmarks/${bookmarkId}`, { method: "DELETE" });
-      if (res.ok) fetchBookmarkData();
+      await deleteBookmarkApi(bookmarkId);
+      fetchBookmarkData();
     } catch (err) {
       console.error("Failed to delete bookmark", err);
     }
