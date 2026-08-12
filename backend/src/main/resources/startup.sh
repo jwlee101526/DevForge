@@ -18,6 +18,4 @@ if [ ! -x /home/.local/bin/agy ]; then
   fi
 fi
 
-JAR_FILE="/home/site/wwwroot/${WEBSITE_JAVA_JAR_FILE_NAME:-app.jar}"
-
-exec java --enable-native-access=ALL-UNNAMED -jar "${JAR_FILE}"
+exec java --enable-native-access=ALL-UNNAMED -cp /home/site/wwwroot org.springframework.boot.loader.launch.JarLauncher
