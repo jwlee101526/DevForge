@@ -23,9 +23,10 @@ public class ExportController {
     @GetMapping("/markdown")
     public ResponseEntity<byte[]> exportMarkdown(
             @RequestParam(required = false) UUID groupId,
+            @RequestParam(required = false, defaultValue = "true") boolean includeAnswers,
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         UUID userId = securityUtils.extractUserId(authHeader);
-        String markdown = exportService.exportToMarkdown(userId, groupId);
+        String markdown = exportService.exportToMarkdown(userId, groupId, includeAnswers);
 
         byte[] content = markdown.getBytes(StandardCharsets.UTF_8);
         return ResponseEntity.ok()
@@ -37,12 +38,28 @@ public class ExportController {
     @GetMapping("/html")
     public ResponseEntity<String> exportHtml(
             @RequestParam(required = false) UUID groupId,
+            @RequestParam(required = false, defaultValue = "true") boolean includeAnswers,
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         UUID userId = securityUtils.extractUserId(authHeader);
-        String html = exportService.exportToPrintableHtml(userId, groupId);
+        String html = exportService.exportToPrintableHtml(userId, groupId, includeAnswers);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.TEXT_HTML)
                 .body(html);
+    }
+
+    @GetMapping("/pdf")
+    public ResponseEntity<byte[]> exportPdf(
+            @RequestParam(required = false) UUID groupId,
+            @RequestParam(required = false, defaultValue = "true") boolean includeAnswers,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        UUID userId = securityUtils.extractUserId(authHeader);
+        String html = exportService.exportToPrintableHtml(userId, groupId, includeAnswers);
+
+        byte[] pdfBytes = html.getBytes(StandardCharsets.UTF_8);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"DevForge_StudyNotes.pdf\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfBytes);
     }
 }

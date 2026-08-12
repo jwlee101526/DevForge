@@ -28,6 +28,7 @@ export const AppSidebar: React.FC<{ children?: React.ReactNode }> = ({ children 
     { label: "오답 다시 풀기", path: "/retry", icon: RefreshIcon },
     { label: "엄선 개발 문제집", path: "/workbook", icon: Book02Icon },
     { label: "시나리오 모의면접", path: "/interview", icon: SparklesIcon },
+    { label: "1:1 라이브 면접 스파링", path: "/sparring", icon: SparklesIcon },
     { label: "약점 & 학습 리포트", path: "/stats", icon: ChartHistogramIcon },
     { label: "API 명세 (Scalar)", path: "/docs", icon: CodeIcon, isExternal: true },
   ];

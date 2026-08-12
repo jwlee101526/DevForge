@@ -22,7 +22,7 @@ public class ExportService {
     private final BookmarkGroupRepository groupRepository;
 
     @Transactional(readOnly = true)
-    public String exportToMarkdown(UUID userId, UUID groupId) {
+    public String exportToMarkdown(UUID userId, UUID groupId, boolean includeAnswers) {
         List<BookmarkedQuestion> bookmarks;
         String groupName = "전체 오답 및 필수 문제집";
 
@@ -39,7 +39,8 @@ public class ExportService {
         StringBuilder sb = new StringBuilder();
         sb.append("# 📘 DevForge - ").append(groupName).append("\n\n");
         sb.append("> 생성 일시: ").append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))).append("\n");
-        sb.append("> 총 문제 수: ").append(bookmarks.size()).append("개\n\n");
+        sb.append("> 총 문제 수: ").append(bookmarks.size()).append("개\n");
+        sb.append("> 정답 포함 여부: ").append(includeAnswers ? "포함 (해설집용)" : "미포함 (실전 문제풀이용)").append("\n\n");
         sb.append("---\n\n");
 
         int index = 1;
@@ -51,7 +52,8 @@ public class ExportService {
             if (q.getQuestionJson() != null && !q.getQuestionJson().isBlank()) {
                 sb.append("```json\n").append(q.getQuestionJson()).append("\n```\n\n");
             }
-            if (q.getAnswerKeyJson() != null && !q.getAnswerKeyJson().isBlank()) {
+
+            if (includeAnswers && q.getAnswerKeyJson() != null && !q.getAnswerKeyJson().isBlank()) {
                 sb.append("<details>\n<summary><b>💡 정답 및 해설 보기</b></summary>\n\n");
                 sb.append("```json\n").append(q.getAnswerKeyJson()).append("\n```\n</details>\n\n");
             }
@@ -62,12 +64,12 @@ public class ExportService {
     }
 
     @Transactional(readOnly = true)
-    public String exportToPrintableHtml(UUID userId, UUID groupId) {
-        String markdown = exportToMarkdown(userId, groupId);
+    public String exportToPrintableHtml(UUID userId, UUID groupId, boolean includeAnswers) {
+        String markdown = exportToMarkdown(userId, groupId, includeAnswers);
         StringBuilder html = new StringBuilder();
         html.append("<!DOCTYPE html><html><head><meta charset='UTF-8'><title>DevForge Study Notes</title>");
         html.append("<style>");
-        html.append("body { font-family: 'Noto Sans KR', sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #1e293b; }");
+        html.append("body { font-family: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #1e293b; }");
         html.append("h1 { color: #4f46e5; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }");
         html.append("h3 { color: #0f172a; margin-top: 24px; }");
         html.append("code, pre { background: #f1f5f9; padding: 4px 8px; border-radius: 4px; font-family: monospace; }");

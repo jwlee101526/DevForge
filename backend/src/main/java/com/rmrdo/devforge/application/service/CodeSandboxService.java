@@ -16,7 +16,7 @@ public class CodeSandboxService {
 
     public record TestCase(String input, String expectedOutput) {}
     public record TestResult(int testCaseId, boolean passed, String actualOutput, String expectedOutput) {}
-    public record SandboxResult(boolean success, long executionTimeMs, List<TestResult> testResults, String stdout) {}
+    public record SandboxResult(boolean success, long executionTimeMs, long memoryUsedBytes, List<TestResult> testResults, String stdout) {}
 
     public SandboxResult execute(String language, String code, List<TestCase> testCases) {
         long startTime = System.currentTimeMillis();
@@ -24,7 +24,7 @@ public class CodeSandboxService {
         StringBuilder stdout = new StringBuilder();
 
         if (code == null || code.isBlank()) {
-            return new SandboxResult(false, 0, List.of(), "코드가 비어있습니다.");
+            return new SandboxResult(false, 0, 0L, List.of(), "코드가 비어있습니다.");
         }
 
         boolean allPassed = true;
@@ -43,9 +43,10 @@ public class CodeSandboxService {
         }
 
         long executionTimeMs = System.currentTimeMillis() - startTime;
+        long memoryUsedBytes = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         stdout.append("코드 컴파일 및 ").append(testCases.size()).append("개 테스트 케이스 평가 완료. (소요시간: ").append(executionTimeMs).append("ms)");
 
-        return new SandboxResult(allPassed, executionTimeMs, results, stdout.toString());
+        return new SandboxResult(allPassed, executionTimeMs, memoryUsedBytes, results, stdout.toString());
     }
 
     private String evaluateCodeSnippet(String language, String code, String input) {

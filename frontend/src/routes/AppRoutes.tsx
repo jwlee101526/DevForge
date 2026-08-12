@@ -9,6 +9,7 @@ import QuestionExplorerPage from "@/pages/QuestionExplorerPage";
 import QuizPage from "@/pages/QuizPage";
 import QuizTestPage from "@/pages/QuizTestPage";
 import ScenarioInterviewPage from "@/pages/ScenarioInterviewPage";
+import SparringPage from "@/pages/SparringPage";
 import SignupPage from "@/pages/SignupPage";
 import WorkbookPage from "@/pages/WorkbookPage";
 
@@ -27,6 +28,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/retry" element={<IncorrectRetryPage />} />
         <Route path="/workbook" element={<WorkbookPage />} />
         <Route path="/interview" element={<ScenarioInterviewPage />} />
+        <Route path="/sparring" element={<SparringPage />} />
         <Route path="/stats" element={<QuizPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

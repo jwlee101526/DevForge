@@ -20,16 +20,21 @@ public class NotificationController {
     private final SecurityUtils securityUtils;
 
     @PostMapping("/subscribe")
-    public ResponseEntity<DailyNotificationSubscription> subscribe(
-            @RequestBody Map<String, String> payload,
+    public ResponseEntity<Map<String, Object>> subscribe(
+            @RequestBody Map<String, Object> payload,
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         UUID userId = securityUtils.extractUserId(authHeader);
-        String email = payload.get("email");
-        String pushEndpoint = payload.get("pushEndpoint");
-        String preferredTime = payload.get("preferredTime");
+        String email = (String) payload.get("email");
+        String pushEndpoint = (String) payload.get("endpoint");
+        if (pushEndpoint == null) pushEndpoint = (String) payload.get("pushEndpoint");
+        String preferredTime = (String) payload.get("preferredTime");
 
         DailyNotificationSubscription sub = notificationService.subscribe(userId, email, pushEndpoint, preferredTime);
-        return ResponseEntity.ok(sub);
+        return ResponseEntity.ok(Map.of(
+                "subscribed", true,
+                "subscriptionId", sub.getId(),
+                "preferredTime", sub.getPreferredTime() != null ? sub.getPreferredTime() : "09:00"
+        ));
     }
 
     @GetMapping("/subscription")
