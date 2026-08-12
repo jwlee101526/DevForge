@@ -11,10 +11,11 @@ class CliProcessExecutorTest {
     @Test
     void executeFailsWhenProcessWritesOnlyStderr() {
         CliProcessExecutor executor = new CliProcessExecutor();
+        ShellCommand command = stderrCommand("jetski: no output produced");
 
         assertThatThrownBy(() -> executor.execute(
-                "cmd.exe",
-                List.of("/c", "echo jetski: no output produced 1>&2"),
+                command.executable(),
+                command.arguments(),
                 null,
                 10
         ))
@@ -26,14 +27,25 @@ class CliProcessExecutorTest {
     @Test
     void executeAllowsOnlyStderrWhenStdoutIsNotRequired() {
         CliProcessExecutor executor = new CliProcessExecutor();
+        ShellCommand command = stderrCommand("Usage of agy");
 
         executor.execute(
-                "cmd.exe",
-                List.of("/c", "echo Usage of agy 1>&2"),
+                command.executable(),
+                command.arguments(),
                 null,
                 10,
                 null,
                 false
         );
+    }
+
+    private ShellCommand stderrCommand(String text) {
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            return new ShellCommand("cmd.exe", List.of("/c", "echo " + text + " 1>&2"));
+        }
+        return new ShellCommand("sh", List.of("-c", "echo '" + text + "' >&2"));
+    }
+
+    private record ShellCommand(String executable, List<String> arguments) {
     }
 }
