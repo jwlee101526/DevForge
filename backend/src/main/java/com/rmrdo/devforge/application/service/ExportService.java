@@ -43,6 +43,12 @@ public class ExportService {
         sb.append("> 정답 포함 여부: ").append(includeAnswers ? "포함 (해설집용)" : "미포함 (실전 문제풀이용)").append("\n\n");
         sb.append("---\n\n");
 
+        if (bookmarks.isEmpty()) {
+            sb.append("> 💡 현재 책갈피 그룹에 수집된 퀴즈 문제가 없습니다.\n");
+            sb.append("> 퀴즈 생성 화면이나 유형별 문제 탐색 화면에서 문제에 책갈피를 지정해 보세요.\n\n");
+            return sb.toString();
+        }
+
         int index = 1;
         for (BookmarkedQuestion q : bookmarks) {
             sb.append("### Q").append(index++).append(". ").append(q.getTargetWord() != null ? q.getTargetWord() : "개발 개념 문제").append("\n");

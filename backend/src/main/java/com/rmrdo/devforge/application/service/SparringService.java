@@ -108,6 +108,23 @@ public class SparringService {
         messagingTemplate.convertAndSend("/sub/room/" + roomId, evalMsg);
     }
 
+    public void processLeave(SparringMessage msg) {
+        if (msg.getRoomId() != null) {
+            log.info("User {} left room {}", msg.getSenderId(), msg.getRoomId());
+            messagingTemplate.convertAndSend("/sub/room/" + msg.getRoomId(), SparringMessage.builder()
+                    .type(SparringMessage.Type.LEAVE)
+                    .roomId(msg.getRoomId())
+                    .senderId(msg.getSenderId())
+                    .feedbackText("상대방이 면접 대결 방을 퇴장하였습니다.")
+                    .build());
+            roomUsers.remove(msg.getRoomId());
+            roomRounds.remove(msg.getRoomId());
+        }
+        if (msg.getSenderId() != null) {
+            waitingQueue.remove(msg.getSenderId());
+        }
+    }
+
     private void sendQuestion(String roomId, int round) {
         SparringMessage qMsg = SparringMessage.builder()
                 .type(SparringMessage.Type.QUESTION)

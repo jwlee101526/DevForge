@@ -32,4 +32,10 @@ public class SparringController {
         log.info("STOMP /pub/sparring/follow-up received: {}", message);
         sparringService.processFollowUp(message);
     }
+
+    @MessageMapping("/sparring/leave")
+    public void handleLeave(SparringMessage message) {
+        log.info("STOMP /pub/sparring/leave received: {}", message);
+        sparringService.processLeave(message);
+    }
 }
