@@ -37,6 +37,12 @@ variable "github_repository" {
   default     = "jwlee101526/DevForge"
 }
 
+variable "github_repository_immutable" {
+  description = "GitHub OIDC가 owner/repository ID를 포함해 발급하는 저장소 subject 식별자."
+  type        = string
+  default     = "jwlee101526@283841749/DevForge@1331518967"
+}
+
 variable "deploy_branch" {
   description = "배포 workflow가 실행되는 브랜치."
   type        = string

@@ -37,6 +37,14 @@ resource "azuread_application_federated_identity_credential" "deploy_branch" {
   subject        = "repo:${var.github_repository}:ref:refs/heads/${var.deploy_branch}"
 }
 
+resource "azuread_application_federated_identity_credential" "deploy_branch_immutable" {
+  application_id = azuread_application.github_actions.id
+  display_name   = "deploy-branch-immutable"
+  audiences      = ["api://AzureADTokenExchange"]
+  issuer         = "https://token.actions.githubusercontent.com"
+  subject        = "repo:${var.github_repository_immutable}:ref:refs/heads/${var.deploy_branch}"
+}
+
 resource "azurerm_role_assignment" "subscription_contributor" {
   scope                = "/subscriptions/${var.subscription_id}"
   role_definition_name = "Contributor"
