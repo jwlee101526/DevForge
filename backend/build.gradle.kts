@@ -16,9 +16,14 @@ java {
 
 val frontendDir = layout.projectDirectory.dir("../frontend")
 val frontendDistDir = frontendDir.dir("dist")
+val isWindows = System.getProperty("os.name").lowercase().contains("windows")
 val frontendBuild = tasks.register<Exec>("frontendBuild") {
     workingDir = frontendDir.asFile
-    commandLine("cmd", "/c", "pnpm", "build")
+    if (isWindows) {
+        commandLine("cmd", "/c", "pnpm", "build")
+    } else {
+        commandLine("pnpm", "build")
+    }
 }
 
 repositories {
