@@ -109,6 +109,13 @@ public class QuizController {
         ));
     }
 
+    @GetMapping("/stats/rank")
+    public ResponseEntity<com.rmrdo.devforge.application.dto.response.UserRankDto> getUserRank(
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        UUID userId = extractUserId(authHeader);
+        return ResponseEntity.ok(statsService.getUserRank(userId));
+    }
+
     private UUID extractUserId(String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return null;

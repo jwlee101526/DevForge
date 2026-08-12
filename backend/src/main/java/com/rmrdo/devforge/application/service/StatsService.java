@@ -88,4 +88,20 @@ public class StatsService {
 
         return new QuizStatsResponse(summary, wordStats, recentSessions);
     }
+
+    @Transactional(readOnly = true)
+    /** 사용자별 누적 정답 수 및 점수를 기반으로 F~S 랭크 정보를 계산한다. */
+    public com.rmrdo.devforge.application.dto.response.UserRankDto getUserRank(UUID userId) {
+        if (userId == null) {
+            return com.rmrdo.devforge.application.dto.response.UserRankDto.calculate(0);
+        }
+        List<QuizSession> sessions = sessionRepository.findByUserIdAndScopeAndCreatedAtBetweenOrderByCreatedAtDesc(
+                userId, "PERSONAL", LocalDateTime.now().minusYears(5), LocalDateTime.now().plusDays(1), PageRequest.of(0, 500));
+
+        int totalXp = 0;
+        for (QuizSession s : sessions) {
+            totalXp += s.getScore() * 15;
+        }
+        return com.rmrdo.devforge.application.dto.response.UserRankDto.calculate(totalXp);
+    }
 }

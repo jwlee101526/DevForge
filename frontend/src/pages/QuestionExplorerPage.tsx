@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Book02Icon, FilterIcon, Search01Icon } from "@hugeicons/core-free-icons";
+import { Add01Icon, Book02Icon, FilterIcon, Search01Icon } from "@hugeicons/core-free-icons";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -54,9 +55,18 @@ export const QuestionExplorerPage: React.FC = () => {
               생성된 모든 퀴즈 문제와 개념 단어를 문제 유형 및 기술 스택별로 탐색할 수 있습니다.
             </p>
           </div>
-          <Badge className="border-0 bg-indigo-50 text-indigo-600 font-extrabold px-3 py-1 text-xs self-start sm:self-auto">
-            총 {filteredItems.length}개 항목
-          </Badge>
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <Link
+              to="/questions/create"
+              className="flex items-center gap-1.5 rounded-xl bg-indigo-600 px-3.5 py-2 text-xs font-black text-white hover:bg-indigo-500 shadow-xs"
+            >
+              <HugeiconsIcon icon={Add01Icon} className="h-4 w-4" />
+              자작 문제 직접 작성
+            </Link>
+            <Badge className="border-0 bg-indigo-50 text-indigo-600 font-extrabold px-3 py-2 text-xs">
+              총 {filteredItems.length}개
+            </Badge>
+          </div>
         </div>
 
         {/* Filter Bar */}
