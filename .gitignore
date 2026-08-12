@@ -1,3 +1,10 @@
 /data
 /build
 /.idea
+**/.terraform/
+*.tfstate
+*.tfstate.*
+infra/terraform.tfvars
+.env
+.env.local
+.env.*.local

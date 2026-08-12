@@ -20,17 +20,17 @@ spring:
     default-property-inclusion: non_null
 
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
 
 cors:
-  allowed-origin: http://localhost:5173
+  allowed-origin: ${CORS_ALLOWED_ORIGIN:http://localhost:5173}
 
 ai-provider:
-  default-provider: Antigravity
+  default-provider: ${AI_PROVIDER_DEFAULT:Antigravity}
   antigravity:
-    executable-path: agy
+    executable-path: ${ANTIGRAVITY_EXECUTABLE_PATH:agy}
     output-format: json
-    timeout-seconds: 300
+    timeout-seconds: ${ANTIGRAVITY_TIMEOUT_SECONDS:300}
     log-file: ${ANTIGRAVITY_LOG_FILE:./build/antigravity-cli.log}
     auto-configure-permissions: ${ANTIGRAVITY_AUTO_CONFIGURE_PERMISSIONS:true}
     shared-config-path: ${ANTIGRAVITY_SHARED_CONFIG_PATH:}
@@ -41,7 +41,6 @@ ai-provider:
       GOOGLE_API_KEY: ${GOOGLE_API_KEY:}
       GOOGLE_APPLICATION_CREDENTIALS: ${GOOGLE_APPLICATION_CREDENTIALS:}
       ANTIGRAVITY_API_KEY: ${ANTIGRAVITY_API_KEY:}
-
 logging:
   level:
     com.rmrdo.devforge: DEBUG

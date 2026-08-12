@@ -20,7 +20,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -31,6 +33,8 @@ public class AntigravityCliProvider implements AiQuizGenerator {
     private final AiProviderProperties.AntigravityConfig config;
     private final ObjectMapper objectMapper;
     private final AntigravityPromptFactory promptFactory;
+    private volatile String resolvedExecutablePath;
+    private volatile String lastAvailabilityError;
 
     public AntigravityCliProvider(CliProcessExecutor executor, AiProviderProperties properties, ObjectMapper objectMapper) {
         this.executor = executor;
@@ -330,11 +334,30 @@ public class AntigravityCliProvider implements AiQuizGenerator {
     public boolean isAvailable() {
         try {
             ensurePermissionConfig();
-            executor.execute(config.getExecutablePath(), List.of("--help"), null, 10, config.getEnv(), false);
+            resolvedExecutablePath = resolveExecutablePath();
+            lastAvailabilityError = null;
             return true;
         } catch (Exception e) {
+            lastAvailabilityError = e.getMessage();
+            log.warn("Antigravity provider is not available: {}", e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public Map<String, Object> getStatus() {
+        boolean available = isAvailable();
+        Map<String, Object> status = new LinkedHashMap<>();
+        status.put("name", getProviderName());
+        status.put("available", available);
+        status.put("configuredExecutablePath", config.getExecutablePath());
+        status.put("resolvedExecutablePath", resolvedExecutablePath);
+        status.put("sharedConfigPath", sharedConfigPath().toString());
+        status.put("sharedConfigExists", Files.exists(sharedConfigPath()));
+        if (lastAvailabilityError != null && !lastAvailabilityError.isBlank()) {
+            status.put("error", lastAvailabilityError);
+        }
+        return status;
     }
 
     private String runAntigravity(String prompt) {
@@ -356,7 +379,33 @@ public class AntigravityCliProvider implements AiQuizGenerator {
         }
         args.add("--print");
         args.add(prompt);
-        return executor.execute(config.getExecutablePath(), args, null, config.getTimeoutSeconds(), config.getEnv());
+        return executor.execute(resolveExecutablePath(), args, null, config.getTimeoutSeconds(), config.getEnv());
+    }
+
+    private String resolveExecutablePath() {
+        String configuredPath = config.getExecutablePath();
+        if (configuredPath != null && !configuredPath.isBlank() && Files.isExecutable(Path.of(configuredPath))) {
+            return configuredPath;
+        }
+
+        for (String candidate : executableCandidates(configuredPath)) {
+            if (candidate != null && !candidate.isBlank() && Files.isExecutable(Path.of(candidate))) {
+                return candidate;
+            }
+        }
+
+        return "agy";
+    }
+
+    private List<String> executableCandidates(String configuredPath) {
+        List<String> candidates = new ArrayList<>();
+        candidates.add(configuredPath);
+        candidates.add("/home/.local/bin/agy");
+        candidates.add("/home/site/.local/bin/agy");
+        candidates.add("/home/site/wwwroot/.local/bin/agy");
+        candidates.add(Path.of(System.getProperty("user.home"), ".local", "bin", "agy").toString());
+        candidates.add("agy");
+        return candidates;
     }
 
     private void ensurePermissionConfig() {

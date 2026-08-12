@@ -1,0 +1,7 @@
+project_name = "devforge"
+location     = "koreacentral"
+environment  = "prod"
+
+app_settings = {
+  # 필요 시 Azure App Settings를 추가한다.
+}

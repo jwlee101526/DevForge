@@ -85,6 +85,9 @@ public class QuizController {
     @GetMapping("/providers")
     /** 현재 등록된 AI 제공자 목록을 반환한다. */
     public ResponseEntity<Map<String, Object>> getProviders() {
-        return ResponseEntity.ok(Map.of("providers", providerFactory.getRegisteredProviderNames()));
+        return ResponseEntity.ok(Map.of(
+                "providers", providerFactory.getRegisteredProviderNames(),
+                "statuses", providerFactory.getProviderStatuses()
+        ));
     }
 }

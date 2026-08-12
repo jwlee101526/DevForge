@@ -57,4 +57,11 @@ public class AiProviderFactoryImpl implements AiProviderFactory {
                 .map(AiQuizGenerator::getProviderName)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Map<String, Object>> getProviderStatuses() {
+        return providerMap.values().stream()
+                .map(AiQuizGenerator::getStatus)
+                .collect(Collectors.toList());
+    }
 }

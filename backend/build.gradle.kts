@@ -14,6 +14,13 @@ java {
     }
 }
 
+val frontendDir = layout.projectDirectory.dir("../frontend")
+val frontendDistDir = frontendDir.dir("dist")
+val frontendBuild = tasks.register<Exec>("frontendBuild") {
+    workingDir = frontendDir.asFile
+    commandLine("cmd", "/c", "pnpm", "build")
+}
+
 repositories {
     mavenCentral()
 }
@@ -48,4 +55,12 @@ tasks.withType<Test> {
 
 tasks.withType<org.springframework.boot.gradle.tasks.run.BootRun> {
     jvmArgs("--enable-native-access=ALL-UNNAMED")
+}
+
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    dependsOn(frontendBuild)
+    archiveFileName.set("app.jar")
+    from(frontendDistDir) {
+        into("static")
+    }
 }
