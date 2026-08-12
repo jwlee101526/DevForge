@@ -6,12 +6,12 @@ locals {
   startup_command    = "sh /home/site/wwwroot/BOOT-INF/classes/startup.sh"
 
   default_app_settings = {
-    AI_PROVIDER_DEFAULT                    = "Antigravity"
-    ANTIGRAVITY_EXECUTABLE_PATH            = local.agy_path
-    ANTIGRAVITY_LOG_FILE                   = "/home/LogFiles/antigravity-cli.log"
-    ANTIGRAVITY_SHARED_CONFIG_PATH         = "/home/.gemini/antigravity-cli/settings.json"
-    XDG_CONFIG_HOME                        = "/home/.config"
-    DEVFORGE_DB_PATH                       = "/home/devforge.db"
+    AI_PROVIDER_DEFAULT                 = "Antigravity"
+    ANTIGRAVITY_EXECUTABLE_PATH         = local.agy_path
+    ANTIGRAVITY_LOG_FILE                = "/home/LogFiles/antigravity-cli.log"
+    ANTIGRAVITY_SHARED_CONFIG_PATH      = "/home/.gemini/antigravity-cli/settings.json"
+    XDG_CONFIG_HOME                     = "/home/.config"
+    DEVFORGE_DB_PATH                    = "/home/devforge.db"
     WEBSITE_JAVA_JAR_FILE_NAME          = local.jar_name
     SERVER_PORT                         = "8080"
     WEBSITES_ENABLE_APP_SERVICE_STORAGE = "true"
