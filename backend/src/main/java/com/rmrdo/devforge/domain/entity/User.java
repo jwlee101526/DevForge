@@ -42,6 +42,13 @@ public class User {
     @Column(nullable = false, length = 100)
     private String name;
 
+    @Builder.Default
+    @Column(length = 50)
+    private String provider = "LOCAL";
+
+    @Column(length = 100)
+    private String providerId;
+
     private LocalDateTime createdAt;
 
     @PrePersist

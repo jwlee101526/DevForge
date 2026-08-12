@@ -31,6 +31,20 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
+    @PostMapping("/social/login")
+    public ResponseEntity<AuthResponse> socialLogin(@Valid @RequestBody com.rmrdo.devforge.application.dto.request.SocialLoginRequest request) {
+        return ResponseEntity.ok(authService.socialLogin(request));
+    }
+
+    @GetMapping("/social/providers")
+    public ResponseEntity<java.util.List<java.util.Map<String, String>>> getSocialProviders() {
+        return ResponseEntity.ok(java.util.List.of(
+                java.util.Map.of("id", "GITHUB", "name", "GitHub", "color", "#24292e", "icon", "github"),
+                java.util.Map.of("id", "GOOGLE", "name", "Google", "color", "#4285F4", "icon", "google"),
+                java.util.Map.of("id", "KAKAO", "name", "KakaoTalk", "color", "#FEE500", "icon", "kakao")
+        ));
+    }
+
     @GetMapping("/me")
     public ResponseEntity<UserDto> me(@RequestHeader(value = "Authorization", required = false) String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

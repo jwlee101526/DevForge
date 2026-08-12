@@ -42,3 +42,23 @@ export async function getCurrentUserApi(token: string): Promise<User> {
   }
   return res.json();
 }
+
+export async function socialLoginApi(
+  provider: string,
+  code?: string,
+  redirectUri?: string,
+  email?: string,
+  name?: string,
+  providerId?: string
+): Promise<AuthApiResponse> {
+  const res = await fetch(`${API_BASE}/auth/social/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ provider, code, redirectUri, email, name, providerId }),
+  });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.message || "소셜 로그인 연동에 실패했습니다.");
+  }
+  return res.json();
+}

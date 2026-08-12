@@ -51,7 +51,42 @@ public class AuthService {
         }
 
         String token = tokenProvider.createToken(user.getId(), user.getEmail());
-        return new AuthResponse(token, new UserDto(user.getId().toString(), user.getEmail(), user.getName()));
+        return new AuthResponse(token, new UserDto(user.getId().toString(), user.getEmail(), user.getName(), user.getProvider()));
+    }
+
+    @Transactional
+    public AuthResponse socialLogin(com.rmrdo.devforge.application.dto.request.SocialLoginRequest request) {
+        String provider = request.provider().trim().toUpperCase();
+        String email = request.email() != null && !request.email().isBlank()
+                ? request.email().trim().toLowerCase()
+                : provider.toLowerCase() + "_" + UUID.randomUUID().toString().substring(0, 8) + "@social.devforge.com";
+        String name = request.name() != null && !request.name().isBlank()
+                ? request.name().trim()
+                : provider + " User";
+        String providerId = request.providerId() != null && !request.providerId().isBlank()
+                ? request.providerId().trim()
+                : UUID.nameUUIDFromBytes(email.getBytes()).toString();
+
+        User user = userRepository.findByProviderAndProviderId(provider, providerId)
+                .orElseGet(() -> userRepository.findByEmail(email).orElse(null));
+
+        if (user == null) {
+            user = User.builder()
+                    .email(email)
+                    .password(PasswordUtils.hashPassword(UUID.randomUUID().toString()))
+                    .name(name)
+                    .provider(provider)
+                    .providerId(providerId)
+                    .build();
+            user = userRepository.save(user);
+        } else {
+            user.setProvider(provider);
+            user.setProviderId(providerId);
+            userRepository.save(user);
+        }
+
+        String token = tokenProvider.createToken(user.getId(), user.getEmail());
+        return new AuthResponse(token, new UserDto(user.getId().toString(), user.getEmail(), user.getName(), user.getProvider()));
     }
 
     @Transactional(readOnly = true)
@@ -63,7 +98,7 @@ public class AuthService {
         if (user == null) {
             return null;
         }
-        return new UserDto(user.getId().toString(), user.getEmail(), user.getName());
+        return new UserDto(user.getId().toString(), user.getEmail(), user.getName(), user.getProvider());
     }
 
     @Transactional(readOnly = true)
