@@ -1,9 +1,9 @@
 locals {
   normalized_project = lower(replace(var.project_name, "_", "-"))
   resource_prefix    = "${local.normalized_project}-${var.environment}"
-  jar_name        = basename(var.package_path)
-  agy_path        = "/home/.local/bin/agy"
-  startup_command = "sh /home/site/wwwroot/BOOT-INF/classes/startup.sh"
+  jar_name           = basename(var.package_path)
+  agy_path           = "/home/.local/bin/agy"
+  startup_command    = "sh /home/site/wwwroot/BOOT-INF/classes/startup.sh"
 
   default_app_settings = {
     AI_PROVIDER_DEFAULT                    = "Antigravity"
@@ -12,12 +12,12 @@ locals {
     ANTIGRAVITY_SHARED_CONFIG_PATH         = "/home/.gemini/antigravity-cli/settings.json"
     XDG_CONFIG_HOME                        = "/home/.config"
     DEVFORGE_DB_PATH                       = "/home/devforge.db"
-    WEBSITE_JAVA_JAR_FILE_NAME             = local.jar_name
-    SERVER_PORT                            = "8080"
-    WEBSITES_ENABLE_APP_SERVICE_STORAGE    = "true"
-    WEBSITES_PORT                          = "8080"
-    SCM_DO_BUILD_DURING_DEPLOYMENT         = "false"
-    ENABLE_ORYX_BUILD                      = "false"
+    WEBSITE_JAVA_JAR_FILE_NAME          = local.jar_name
+    SERVER_PORT                         = "8080"
+    WEBSITES_ENABLE_APP_SERVICE_STORAGE = "true"
+    WEBSITES_PORT                       = "8080"
+    SCM_DO_BUILD_DURING_DEPLOYMENT      = "false"
+    ENABLE_ORYX_BUILD                   = "false"
   }
 
   common_tags = merge(
