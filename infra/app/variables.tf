@@ -37,7 +37,7 @@ variable "java_version" {
 variable "package_path" {
   description = "배포할 Spring Boot 실행 JAR 경로."
   type        = string
-  default     = "../backend/build/libs/app.jar"
+  default     = "../../backend/build/libs/app.jar"
 }
 
 variable "app_settings" {

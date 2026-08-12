@@ -7,7 +7,7 @@ on:
     paths:
       - "backend/**"
       - "frontend/**"
-      - "infra/**"
+      - "infra/app/**"
       - ".github/workflows/terraform-deploy.yml"
   push:
     branches:
@@ -15,7 +15,7 @@ on:
     paths:
       - "backend/**"
       - "frontend/**"
-      - "infra/**"
+      - "infra/app/**"
       - ".github/workflows/terraform-deploy.yml"
   workflow_dispatch:
 
@@ -87,11 +87,11 @@ jobs:
         run: ./gradlew bootJar
 
       - name: Terraform fmt
-        working-directory: infra
+        working-directory: infra/app
         run: terraform fmt -check -recursive
 
       - name: Terraform init
-        working-directory: infra
+        working-directory: infra/app
         run: >
           terraform init
           -backend-config="resource_group_name=${{ secrets.TFSTATE_RESOURCE_GROUP_NAME }}"
@@ -100,11 +100,11 @@ jobs:
           -backend-config="key=devforge-prod.tfstate"
 
       - name: Terraform validate
-        working-directory: infra
+        working-directory: infra/app
         run: terraform validate
 
       - name: Terraform plan
-        working-directory: infra
+        working-directory: infra/app
         run: terraform plan -out=tfplan
 
   apply:
@@ -153,7 +153,7 @@ jobs:
         run: ./gradlew bootJar
 
       - name: Terraform init
-        working-directory: infra
+        working-directory: infra/app
         run: >
           terraform init
           -backend-config="resource_group_name=${{ secrets.TFSTATE_RESOURCE_GROUP_NAME }}"
@@ -162,5 +162,5 @@ jobs:
           -backend-config="key=devforge-prod.tfstate"
 
       - name: Terraform apply
-        working-directory: infra
+        working-directory: infra/app
         run: terraform apply -auto-approve

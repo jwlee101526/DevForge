@@ -1,0 +1,23 @@
+terraform {
+  required_version = ">= 1.6.0"
+
+  required_providers {
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "~> 3.0"
+    }
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 4.0"
+    }
+  }
+}
+
+provider "azurerm" {
+  subscription_id = var.subscription_id
+  features {}
+}
+
+provider "azuread" {
+  tenant_id = var.tenant_id
+}
