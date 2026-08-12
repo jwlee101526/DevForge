@@ -94,9 +94,27 @@ export const BookmarkManagementPage: React.FC = () => {
               선호하는 퀴즈 문제를 책갈피 그룹/폴더로 자유롭게 분류하고 저장할 수 있습니다.
             </p>
           </div>
-          <Badge className="border-0 bg-indigo-50 text-indigo-600 font-extrabold px-3 py-1 text-xs self-start sm:self-auto">
-            총 {bookmarks.length}개 책갈피 문제
-          </Badge>
+          <div className="flex items-center gap-2">
+            <a
+              href={`/api/export/markdown${selectedGroupId ? `?groupId=${selectedGroupId}` : ''}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors shadow-xs"
+            >
+              📥 Markdown 다운로드
+            </a>
+            <a
+              href={`/api/export/html${selectedGroupId ? `?groupId=${selectedGroupId}` : ''}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl border border-indigo-200 bg-indigo-50 text-xs font-bold text-indigo-700 hover:bg-indigo-100 transition-colors shadow-xs"
+            >
+              🖨️ 인쇄 / PDF 보기
+            </a>
+            <Badge className="border-0 bg-indigo-50 text-indigo-600 font-extrabold px-3 py-1 text-xs">
+              총 {bookmarks.length}개 책갈피 문제
+            </Badge>
+          </div>
         </div>
 
         {/* Group Management Section */}
