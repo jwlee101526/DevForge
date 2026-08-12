@@ -31,6 +31,7 @@ public class ConceptService {
     }
 
     @Transactional(readOnly = true)
+    /** 사용자의 카테고리 태그 목록을 조회한다. 지정된 사용자 태그가 없으면 시스템 기본 태그를 반환한다. */
     public CategoryListResponse getCategories(UUID userId) {
         List<String> tags;
         if (userId != null) {
@@ -50,15 +51,13 @@ public class ConceptService {
     }
 
     @Transactional(readOnly = true)
+    /** 사용자 본인의 개념 학습 목록만 엄격히 조회하며, 로그아웃 사용자에 대해 타 사용자의 개인 단어장이 노출되지 않도록 한다. */
     public ConceptListResponse getConcepts(UUID userId) {
         List<Concept> concepts;
         if (userId != null) {
             concepts = conceptRepository.findByUserIdAndScopeOrderByCreatedAtDesc(userId, "PERSONAL");
-            if (concepts.isEmpty()) {
-                concepts = conceptRepository.findAllByOrderByCreatedAtDesc();
-            }
         } else {
-            concepts = conceptRepository.findAllByOrderByCreatedAtDesc();
+            concepts = List.of();
         }
 
         List<ConceptItemDto> items = concepts.stream().map(c -> new ConceptItemDto(

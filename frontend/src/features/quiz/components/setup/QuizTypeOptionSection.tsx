@@ -61,28 +61,55 @@ export const QuizTypeOptionSection: React.FC<QuizTypeOptionSectionProps> = ({
             총 {totalQuestionCount.toLocaleString()}문항
           </p>
         </div>
-        <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
-          {QUESTION_TYPE_OPTIONS.map((option) => (
-            <label key={option.key} className="grid grid-cols-[minmax(0,1fr)_68px] items-center gap-3 rounded-xl bg-slate-50/70 p-3.5">
-              <span className="min-w-0">
-                <span className="block truncate text-sm font-bold text-slate-900">{option.label}</span>
-                <span className="mt-0.5 block truncate text-xs text-slate-400">
-                  {option.description}
-                </span>
-              </span>
-              <Input
-                type="number"
-                inputMode="numeric"
-                min={0}
-                max={maxQuestionCount}
-                value={questionTypeCounts[option.key] ?? 0}
-                disabled={disabled}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setQuestionTypeCount(option.key, event.target.value)}
-                className="h-10 rounded-lg border-0 bg-white text-center text-sm font-extrabold shadow-2xs focus-visible:ring-2 focus-visible:ring-indigo-500/20"
-                aria-label={`${option.label} 문항 수`}
-              />
-            </label>
-          ))}
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          {QUESTION_TYPE_OPTIONS.map((option) => {
+            const currentVal = questionTypeCounts[option.key] ?? 0;
+            return (
+              <div
+                key={option.key}
+                className="flex items-center justify-between gap-3 rounded-xl bg-slate-50/90 p-3.5 border border-slate-100"
+              >
+                <div className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-bold text-slate-900">{option.label}</span>
+                  <span className="mt-0.5 block truncate text-xs font-medium text-slate-400">
+                    {option.description}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1 bg-white rounded-lg p-1 shadow-2xs border border-slate-200/80">
+                  <button
+                    type="button"
+                    disabled={disabled || currentVal <= 0}
+                    onClick={() => setQuestionTypeCount(option.key, Math.max(0, currentVal - 1))}
+                    className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-100 text-base font-bold text-slate-700 hover:bg-slate-200 active:scale-95 disabled:opacity-40 disabled:pointer-events-none transition-transform"
+                    aria-label={`${option.label} 1개 감소`}
+                  >
+                    -
+                  </button>
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    value={currentVal === 0 ? "0" : currentVal}
+                    disabled={disabled}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      setQuestionTypeCount(option.key, event.target.value)
+                    }
+                    className="h-8 w-10 border-0 p-0 text-center text-sm font-extrabold text-slate-900 focus-visible:ring-0 focus-visible:bg-indigo-50/50 rounded"
+                    aria-label={`${option.label} 문항 수`}
+                  />
+                  <button
+                    type="button"
+                    disabled={disabled || totalQuestionCount >= maxQuestionCount}
+                    onClick={() => setQuestionTypeCount(option.key, currentVal + 1)}
+                    className="flex h-8 w-8 items-center justify-center rounded-md bg-indigo-50 text-base font-bold text-indigo-600 hover:bg-indigo-100 active:scale-95 disabled:opacity-40 disabled:pointer-events-none transition-transform"
+                    aria-label={`${option.label} 1개 증가`}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         </div>
         <p className="mt-2.5 text-xs text-slate-400">
           최대 {maxQuestionCount}문항까지 생성할 수 있습니다.

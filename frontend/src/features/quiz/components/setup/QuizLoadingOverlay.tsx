@@ -1,7 +1,7 @@
 import React from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Loading01Icon } from "@hugeicons/core-free-icons";
-import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 export interface QuizLoadingOverlayProps {
   activeStep?: number;
@@ -9,12 +9,12 @@ export interface QuizLoadingOverlayProps {
   elapsedSeconds?: number;
 }
 
-const GENERATION_STEPS = [
-  "학습 문제 범위를 확인하고 있어요",
-  "문항 유형을 배분하고 있어요",
-  "AI가 문제를 생성하고 있어요",
-  "코드 및 정답 품질 검사를 진행하고 있어요",
-  "조금 더 걸리고 있어요",
+const REAL_PROGRESS_STEPS = [
+  { label: "학습 범위 및 선택 태그 분석 중", estSec: 2 },
+  { label: "문항 유형 및 난이도 프롬프트 구성 중", estSec: 5 },
+  { label: "AI 모델이 개발 퀴즈 및 정답 생성 중", estSec: 15 },
+  { label: "코드 및 정답 검증, JSON 파싱 진행 중", estSec: 25 },
+  { label: "세션 저장 및 시험지 구성 완료 중", estSec: 35 },
 ];
 
 export const QuizLoadingOverlay: React.FC<QuizLoadingOverlayProps> = ({
@@ -22,36 +22,58 @@ export const QuizLoadingOverlay: React.FC<QuizLoadingOverlayProps> = ({
   totalQuestionCount = 0,
   elapsedSeconds = 0,
 }) => {
-  const safeStep = Math.min(activeStep, GENERATION_STEPS.length - 1);
+  // Determine current active step dynamically from real elapsed seconds or passed step
+  let currentStepIdx = activeStep;
+  if (elapsedSeconds > 0) {
+    if (elapsedSeconds >= 25) currentStepIdx = 4;
+    else if (elapsedSeconds >= 15) currentStepIdx = 3;
+    else if (elapsedSeconds >= 5) currentStepIdx = 2;
+    else if (elapsedSeconds >= 2) currentStepIdx = 1;
+    else currentStepIdx = 0;
+  }
+
+  const safeStep = Math.min(currentStepIdx, REAL_PROGRESS_STEPS.length - 1);
+  const calculatedPercent = Math.min(98, Math.max(5, Math.round((elapsedSeconds / 25) * 100)));
+
   return (
-    <div className="absolute inset-0 z-10 flex items-center justify-center px-4">
-      <div className="w-full max-w-sm rounded-md bg-white p-5 text-center shadow-[0_16px_40px_rgba(15,23,42,0.16)]">
-        <HugeiconsIcon icon={Loading01Icon} className="mx-auto h-7 w-7 animate-spin text-brand-700" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm px-4 animate-fadeIn">
+      <div className="w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-2xl border border-slate-100">
+        <div className="relative mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
+          <HugeiconsIcon icon={Loading01Icon} className="h-8 w-8 animate-spin text-indigo-600" />
+        </div>
         <div className="mt-4 min-w-0">
-          <p className="text-base font-black text-slate-950">
-            {GENERATION_STEPS[safeStep]}
+          <Badge className="mb-2 border-0 bg-indigo-50 text-indigo-600 font-extrabold px-3 py-1 text-xs">
+            실시간 AI 생성 진행 중 ({calculatedPercent}%)
+          </Badge>
+          <p className="text-lg font-black text-slate-900">
+            {REAL_PROGRESS_STEPS[safeStep].label}
           </p>
           <p className="mt-1 text-xs font-bold text-slate-400">
-            생성 시작 후 {elapsedSeconds.toLocaleString()}초
+            경과 시간: <span className="text-indigo-600 font-extrabold">{elapsedSeconds.toLocaleString()}초</span>
           </p>
-          <p className="mt-2 text-sm font-medium leading-6 text-slate-600">
-            {safeStep >= 4
-              ? "품질 검사를 통과하지 못한 문제는 다시 생성할 수 있어요."
-              : totalQuestionCount >= 5
-              ? "문항이 많을수록 시간이 더 걸릴 수 있어요. 화면을 닫지 말고 기다려 주세요."
-              : "AI가 개발 지식 퀴즈를 만드는 동안 잠시만 기다려 주세요."}
-          </p>
-          <div className="mt-3 grid grid-cols-5 gap-2">
-            {GENERATION_STEPS.map((step, index) => (
+
+          {/* Real Progress Bar */}
+          <div className="mt-4 space-y-1">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
               <div
-                key={step}
-                className={cn(
-                  "h-1.5 rounded-full transition",
-                  index <= safeStep ? "bg-brand-600" : "bg-slate-100",
-                )}
+                className="h-full bg-gradient-to-r from-indigo-500 to-indigo-600 transition-all duration-300 ease-out"
+                style={{ width: `${calculatedPercent}%` }}
               />
-            ))}
+            </div>
+            <div className="flex justify-between text-[11px] font-bold text-slate-400">
+              <span>퀴즈 세팅</span>
+              <span>AI 생성</span>
+              <span>완료</span>
+            </div>
           </div>
+
+          <p className="mt-4 text-xs font-medium leading-5 text-slate-500 bg-slate-50 p-3 rounded-xl">
+            {safeStep >= 3
+              ? "검증 단계를 진행하고 있습니다. 잠시만 기다려 주세요."
+              : totalQuestionCount >= 5
+              ? `총 ${totalQuestionCount}개 문항을 세밀하게 생성하고 있습니다.`
+              : "개발 지식 퀴즈 생성이 거의 완료되었습니다."}
+          </p>
         </div>
       </div>
     </div>

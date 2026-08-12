@@ -211,10 +211,15 @@ public class QuizService {
     }
 
     @Transactional(readOnly = true)
-    /** 세션에 저장된 문제와 제출 답안, 채점 결과를 조회한다. */
-    public Map<String, Object> getSession(UUID id) {
+    /** 세션에 저장된 문제와 제출 답안, 채점 결과를 조회한다. 소유권 검증을 통해 타 사용자 데이터 접근을 차단한다. */
+    public Map<String, Object> getSession(UUID id, UUID requestingUserId) {
         QuizSession session = sessionRepository.findById(id).orElse(null);
         if (session == null) {
+            return null;
+        }
+
+        /** 개인 사용자가 지정된 세션의 경우 요청 사용자 ID와 일치하지 않으면 접근을 차단한다. */
+        if (session.getUserId() != null && !session.getUserId().equals(requestingUserId)) {
             return null;
         }
 
@@ -234,6 +239,11 @@ public class QuizService {
         }
 
         return response;
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Object> getSession(UUID id) {
+        return getSession(id, null);
     }
 
     private String generateSessionToken() {

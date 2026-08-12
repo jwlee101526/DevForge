@@ -81,8 +81,11 @@ public class QuizController {
     }
 
     @GetMapping("/sessions/{id}")
-    public ResponseEntity<Map<String, Object>> getSession(@PathVariable UUID id) {
-        Map<String, Object> sessionData = quizService.getSession(id);
+    public ResponseEntity<Map<String, Object>> getSession(
+            @PathVariable UUID id,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        UUID userId = extractUserId(authHeader);
+        Map<String, Object> sessionData = quizService.getSession(id, userId);
         if (sessionData == null) {
             return ResponseEntity.notFound().build();
         }

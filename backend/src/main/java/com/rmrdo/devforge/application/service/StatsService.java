@@ -54,17 +54,13 @@ public class StatsService {
         List<Concept> concepts;
 
         if (userId != null) {
+            /** 회원 계정이 지정된 경우 해당 사용자의 개인 학습 세션과 개념만 조회한다. */
             sessions = sessionRepository.findByUserIdAndScopeAndCreatedAtBetweenOrderByCreatedAtDesc(userId, "PERSONAL", from, to, PageRequest.of(0, 50));
-            if (sessions.isEmpty()) {
-                sessions = sessionRepository.findByCreatedAtBetweenOrderByCreatedAtDesc(from, to, PageRequest.of(0, 50));
-            }
             concepts = conceptRepository.findByUserIdAndScopeOrderByCreatedAtDesc(userId, "PERSONAL");
-            if (concepts.isEmpty()) {
-                concepts = conceptRepository.findAllByOrderByCreatedAtDesc();
-            }
         } else {
-            sessions = sessionRepository.findByCreatedAtBetweenOrderByCreatedAtDesc(from, to, PageRequest.of(0, 50));
-            concepts = conceptRepository.findAllByOrderByCreatedAtDesc();
+            /** 미인증/로그아웃 사용자는 타 사용자의 개인 데이터를 조회할 수 없도록 빈 목록을 반환한다. */
+            sessions = List.of();
+            concepts = List.of();
         }
 
         List<ConceptStatDto> wordStats = concepts.stream()

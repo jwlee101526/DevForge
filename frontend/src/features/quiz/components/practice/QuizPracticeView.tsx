@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useQuizPracticeState } from "../../hooks/useQuizPracticeState";
 import type { GradeResult, Question, QuestionResult, UserAnswer } from "../../types/quiz";
-import { HighlightedPassage } from "./HighlightedPassage";
+import { CodePassage } from "./CodePassage";
 import { QuestionChoiceList } from "./QuestionChoiceList";
 import { QuestionList } from "./QuestionList";
 import { QuizPracticeFooterNav } from "./QuizPracticeFooterNav";
@@ -89,6 +89,7 @@ export const QuizPracticeView: React.FC<QuizPracticeViewProps> = ({
     question,
     answer,
     result,
+    answeredCount,
     progressPercent,
     canGoPrev,
     canGoNext,
@@ -119,6 +120,7 @@ export const QuizPracticeView: React.FC<QuizPracticeViewProps> = ({
             safeIndex={safeIndex}
             totalQuestions={questions.length}
             progressPercent={progressPercent}
+            answeredCount={answeredCount}
             hasGradeResult={Boolean(gradeResult)}
             onResetQuiz={onResetQuiz}
           />
@@ -153,15 +155,11 @@ export const QuizPracticeView: React.FC<QuizPracticeViewProps> = ({
                 {question.prompt}
               </h3>
               {question.passage && (
-                <div className="py-2">
-                  <pre className="font-mono text-sm leading-6 text-slate-900 overflow-x-auto whitespace-pre-wrap bg-slate-50/80 p-4 rounded-2xl">
-                    <HighlightedPassage
-                      text={question.passage}
-                      target={question.target_word}
-                      active={normalizedType === "meaning_choice"}
-                    />
-                  </pre>
-                </div>
+                <CodePassage
+                  passage={question.passage}
+                  targetWord={question.target_word}
+                  isCodeType={normalizedType === "context_choice" || normalizedType === "usage_choice"}
+                />
               )}
 
               {question.answer_format === "choice" ? (

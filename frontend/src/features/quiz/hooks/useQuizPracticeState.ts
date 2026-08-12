@@ -48,6 +48,7 @@ export function useQuizPracticeState({
     question,
     answer,
     result,
+    answeredCount,
     progressPercent,
     canGoPrev,
     canGoNext,
