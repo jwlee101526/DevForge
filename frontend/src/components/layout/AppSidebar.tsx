@@ -26,6 +26,8 @@ export const AppSidebar: React.FC<{ children?: React.ReactNode }> = ({ children 
     { label: "유형별 문제 모아보기", path: "/questions", icon: Book02Icon },
     { label: "책갈피 관리", path: "/bookmarks", icon: Bookmark02Icon },
     { label: "오답 다시 풀기", path: "/retry", icon: RefreshIcon },
+    { label: "엄선 개발 문제집", path: "/workbook", icon: Book02Icon },
+    { label: "시나리오 모의면접", path: "/interview", icon: SparklesIcon },
     { label: "약점 & 학습 리포트", path: "/stats", icon: ChartHistogramIcon },
     { label: "API 명세 (Scalar)", path: "/docs", icon: CodeIcon, isExternal: true },
   ];

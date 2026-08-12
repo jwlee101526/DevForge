@@ -6,7 +6,9 @@ import LoginPage from "@/pages/LoginPage";
 import QuestionExplorerPage from "@/pages/QuestionExplorerPage";
 import QuizPage from "@/pages/QuizPage";
 import QuizTestPage from "@/pages/QuizTestPage";
+import ScenarioInterviewPage from "@/pages/ScenarioInterviewPage";
 import SignupPage from "@/pages/SignupPage";
+import WorkbookPage from "@/pages/WorkbookPage";
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -19,6 +21,8 @@ export const AppRoutes: React.FC = () => {
         <Route path="/questions" element={<QuestionExplorerPage />} />
         <Route path="/bookmarks" element={<BookmarkManagementPage />} />
         <Route path="/retry" element={<IncorrectRetryPage />} />
+        <Route path="/workbook" element={<WorkbookPage />} />
+        <Route path="/interview" element={<ScenarioInterviewPage />} />
         <Route path="/stats" element={<QuizPage />} />
         <Route path="*" element={<Navigate to="/quiz" replace />} />
       </Routes>
