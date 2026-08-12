@@ -20,7 +20,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "quiz_sessions", indexes = {
-    @Index(name = "idx_quiz_session_created_at", columnList = "createdAt")
+    @Index(name = "idx_quiz_session_created_at", columnList = "createdAt"),
+    @Index(name = "idx_quiz_session_user_scope", columnList = "userId,scope")
 })
 @Getter
 @Setter
@@ -33,6 +34,13 @@ public class QuizSession {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(name = "user_id")
+    private UUID userId;
+
+    @Column(length = 20)
+    @Builder.Default
+    private String scope = "PERSONAL";
 
     private int totalQuestions;
 

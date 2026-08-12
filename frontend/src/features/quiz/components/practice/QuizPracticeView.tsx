@@ -112,9 +112,9 @@ export const QuizPracticeView: React.FC<QuizPracticeViewProps> = ({
   const stars = Array.from({ length: 5 }, (_, index) => index < count);
 
   return (
-    <div className="animate-fadeIn grid gap-4 xl:grid-cols-[minmax(0,1fr)_280px] 2xl:grid-cols-[minmax(0,1fr)_320px]">
+    <div className="animate-fadeIn grid gap-6 xl:grid-cols-[minmax(0,1fr)_280px] 2xl:grid-cols-[minmax(0,1fr)_320px]">
       <main className="min-w-0 space-y-4">
-        <div className="rounded-lg border border-slate-200 bg-white">
+        <div className="rounded-2xl bg-white">
           <QuizPracticeHeader
             safeIndex={safeIndex}
             totalQuestions={questions.length}
@@ -123,13 +123,13 @@ export const QuizPracticeView: React.FC<QuizPracticeViewProps> = ({
             onResetQuiz={onResetQuiz}
           />
 
-          <CardContent className="p-6 lg:p-8">
-            <div className="mb-6 flex flex-wrap items-center gap-3">
+          <CardContent className="p-2 sm:p-4">
+            <div className="mb-5 flex flex-wrap items-center gap-3">
               <div className="flex flex-wrap items-center gap-3">
-                <Badge className="rounded-full bg-[#14532d] px-4 py-1.5 text-xs font-black text-white hover:bg-[#14532d]">
+                <Badge className="rounded-full bg-indigo-50 px-3.5 py-1 text-xs font-extrabold text-indigo-600 hover:bg-indigo-50 border-0">
                   {questionTypeLabel(question.question_type)}
                 </Badge>
-                <span className="text-sm font-bold text-slate-600">난이도</span>
+                <span className="text-sm font-bold text-slate-500">난이도</span>
                 <span className="flex items-center gap-0.5">
                   {stars.map((active, index) => (
                     <HugeiconsIcon
@@ -142,19 +142,19 @@ export const QuizPracticeView: React.FC<QuizPracticeViewProps> = ({
                     />
                   ))}
                 </span>
-                <span className="text-xs font-bold text-slate-500">
+                <span className="text-xs font-bold text-slate-400">
                   {DIFFICULTY_LABELS[question.difficulty] || question.difficulty}
                 </span>
               </div>
             </div>
 
             <div className="space-y-5">
-              <h3 className="text-lg font-black leading-8 text-slate-950">
+              <h3 className="text-lg font-extrabold leading-8 text-slate-900">
                 {question.prompt}
               </h3>
               {question.passage && (
-                <div className="border-y border-slate-200 py-5">
-                  <pre className="font-mono text-sm leading-6 text-slate-950 overflow-x-auto whitespace-pre-wrap bg-slate-50 p-4 rounded-md">
+                <div className="py-2">
+                  <pre className="font-mono text-sm leading-6 text-slate-900 overflow-x-auto whitespace-pre-wrap bg-slate-50/80 p-4 rounded-2xl">
                     <HighlightedPassage
                       text={question.passage}
                       target={question.target_word}
@@ -184,14 +184,14 @@ export const QuizPracticeView: React.FC<QuizPracticeViewProps> = ({
                       ? "정답 코드 또는 기술 설명 서술형 답변을 입력하세요."
                       : "정답 명령어/키워드를 직접 입력하세요."
                   }
-                  className="rounded-md border-slate-200 text-base leading-7 focus-visible:ring-[#14532d] disabled:bg-white disabled:opacity-100 font-mono"
+                  className="rounded-2xl border-0 bg-slate-50/80 text-base leading-7 focus-visible:ring-2 focus-visible:ring-indigo-500/20 disabled:bg-white disabled:opacity-100 font-mono p-4"
                 />
               )}
 
               {gradeResult && (
-                <div className="rounded-md border border-slate-200 bg-white px-4 py-3">
-                  <p className="text-xs font-black text-slate-500">내 답</p>
-                  <p className="mt-1 whitespace-pre-wrap text-sm font-bold leading-6 text-slate-950">
+                <div className="rounded-2xl bg-slate-50/80 px-4 py-3.5">
+                  <p className="text-xs font-bold text-slate-400">내 답</p>
+                  <p className="mt-1 whitespace-pre-wrap text-sm font-extrabold leading-6 text-slate-900">
                     {userAnswerLabel(question, answer)}
                   </p>
                 </div>
@@ -199,7 +199,7 @@ export const QuizPracticeView: React.FC<QuizPracticeViewProps> = ({
             </div>
 
             {result && (
-              <div className="mt-8 rounded-md border border-slate-200 bg-slate-50/70 p-4">
+              <div className="mt-6 rounded-2xl bg-slate-50/80 p-4">
                 <ResultExplanation result={result} />
                 <SuggestedConceptInline
                   result={result}

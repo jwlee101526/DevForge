@@ -86,7 +86,7 @@ export function useQuizSetupState({
     0,
   );
 
-  const setQuestionTypeCount = (key: string, value: string | number) => {
+  const setQuestionTypeCount = (key: string, value: unknown) => {
     const digits = String(value).replace(/\D/g, "");
     const current = Number(questionTypeCounts[key] || 0);
     const otherTotal = Math.max(0, totalQuestionCount - current);

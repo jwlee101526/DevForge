@@ -32,8 +32,13 @@ public class QuizService {
     private final ObjectMapper objectMapper;
 
     @Transactional
-    /** AI 생성 결과와 외부에 노출하지 않을 정답 정보를 세션에 저장한다. */
     public QuizGenerateResponse generateQuiz(QuizGenerateRequest request) {
+        return generateQuiz(request, null);
+    }
+
+    @Transactional
+    /** AI 생성 결과와 외부에 노출하지 않을 정답 정보를 세션에 저장한다. */
+    public QuizGenerateResponse generateQuiz(QuizGenerateRequest request, UUID userId) {
         AiQuizGenerator provider = providerFactory.getAvailableProvider();
         QuizGenerateResponse result = provider.generateQuiz(request);
 
@@ -42,6 +47,8 @@ public class QuizService {
                 : request.tag();
 
         QuizSession session = new QuizSession();
+        session.setUserId(userId);
+        session.setScope("PERSONAL");
         session.setTotalQuestions(result.questions() != null ? result.questions().size() : 0);
         session.setTag(tag);
         try {

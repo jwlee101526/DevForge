@@ -44,7 +44,7 @@ export const RecentQuizHistory: React.FC<RecentQuizHistoryProps> = ({
                 key={session.id}
                 type="button"
                 onClick={() => onOpenSession?.(session.id)}
-                className="grid w-full gap-3 px-5 py-4 text-left transition hover:bg-[#fbfaf5] sm:grid-cols-[1fr_auto_auto] sm:items-center"
+                className="grid w-full gap-3 px-5 py-4 text-left transition hover:bg-slate-50 sm:grid-cols-[1fr_auto_auto] sm:items-center"
               >
                 <div>
                   <p className="text-sm font-black text-slate-950">

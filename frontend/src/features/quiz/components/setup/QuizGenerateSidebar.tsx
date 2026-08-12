@@ -27,12 +27,12 @@ export const QuizGenerateSidebar: React.FC<QuizGenerateSidebarProps> = ({
 }) => {
   return (
     <div className="flex min-w-0 flex-col gap-3">
-      <div className="rounded-md bg-white p-3 border border-slate-100">
+      <div className="rounded-xl bg-slate-50/70 p-3.5">
         <p className="text-xs font-bold text-slate-500">선택된 개발 문제 수</p>
-        <p className="mt-2 text-xl font-black text-slate-950">{selectedItemCount.toLocaleString()}개</p>
+        <p className="mt-1.5 text-xl font-black text-slate-900">{selectedItemCount.toLocaleString()}개</p>
       </div>
       <label className="min-w-0 space-y-1.5">
-        <span className="text-xs font-extrabold text-slate-600">(선택) AI 문제 생성 지시사항</span>
+        <span className="text-xs font-bold text-slate-600">(선택) AI 문제 생성 지시사항</span>
         <Textarea
           value={instruction}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => setGoalValue("instruction", event.target.value)}
@@ -40,7 +40,7 @@ export const QuizGenerateSidebar: React.FC<QuizGenerateSidebarProps> = ({
           rows={4}
           maxLength={300}
           disabled={disabled}
-          className="resize-none rounded-md border-slate-200 bg-white text-sm font-medium leading-6 focus-visible:ring-[#0f766e]"
+          className="resize-none rounded-xl border-0 bg-slate-50/70 text-sm font-medium leading-6 focus-visible:ring-2 focus-visible:ring-indigo-500/20"
         />
         <span className="block text-right text-[11px] font-medium text-slate-400">
           {(instruction || "").length} / 300
@@ -49,7 +49,7 @@ export const QuizGenerateSidebar: React.FC<QuizGenerateSidebarProps> = ({
       <Button
         onClick={onGenerate}
         disabled={disabled || !hasUser || totalQuestionCount === 0}
-        className="h-12 w-full rounded-md bg-[#0f766e] text-base font-black text-white shadow-sm hover:bg-[#0b5f59] disabled:bg-slate-200 disabled:text-slate-500 sm:w-48 sm:self-end"
+        className="h-12 w-full rounded-full bg-indigo-600 text-base font-extrabold text-white shadow-sm hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 sm:w-48 sm:self-end"
       >
         {loading ? <HugeiconsIcon icon={Loading01Icon} className="h-4 w-4 animate-spin" /> : <HugeiconsIcon icon={Tick01Icon} className="h-4 w-4" />}
         {loading ? "생성 중..." : "퀴즈 시작"}

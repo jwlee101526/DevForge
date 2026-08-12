@@ -82,8 +82,8 @@ export const ReportHeader: React.FC<ReportHeaderProps> = ({ range, onRangeChange
               type="button"
               onClick={() => applyQuickRange(option)}
               className={cn(
-                "h-8 rounded px-3 text-xs font-bold transition-colors",
-                range?.preset === option.value ? "bg-[#0f766e] text-white" : "text-slate-500 hover:bg-slate-50",
+                "h-8 rounded-md px-3 text-xs font-bold transition-all",
+                range?.preset === option.value ? "bg-indigo-600 text-white shadow-xs" : "text-slate-600 hover:bg-slate-100/70",
               )}
             >
               {option.label}

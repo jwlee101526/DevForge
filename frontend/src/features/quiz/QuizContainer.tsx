@@ -43,8 +43,8 @@ export const QuizContainer: React.FC<QuizContainerProps> = (props) => {
   } = useQuiz(props);
 
   return (
-    <div className="h-full flex flex-col p-4">
-      <div className="border-b border-slate-200">
+    <div className="h-full flex flex-col rounded-3xl bg-white p-6 shadow-sm">
+      <div className="border-b border-slate-100 pb-2">
         <div className="flex gap-8">
           {[
             { id: "practice", label: hasQuiz ? "문제 풀이" : "퀴즈 설정" },
@@ -54,15 +54,15 @@ export const QuizContainer: React.FC<QuizContainerProps> = (props) => {
               key={item.id}
               type="button"
               onClick={() => setActiveView(item.id as "practice" | "stats")}
-              className={`relative h-11 text-sm font-black transition ${
+              className={`relative h-11 text-base font-extrabold transition ${
                 activeView === item.id
-                  ? "text-[#0f766e]"
-                  : "text-slate-500 hover:text-slate-900"
+                  ? "text-indigo-600"
+                  : "text-slate-400 hover:text-slate-800"
               }`}
             >
               {item.label}
               {activeView === item.id && (
-                <span className="absolute inset-x-0 -bottom-px h-0.5 bg-[#0f766e]" />
+                <span className="absolute inset-x-0 -bottom-2 h-0.5 rounded-full bg-indigo-600" />
               )}
             </button>
           ))}
@@ -70,18 +70,18 @@ export const QuizContainer: React.FC<QuizContainerProps> = (props) => {
       </div>
 
       {errorMessage && (
-        <div className="mt-4 rounded-xl border border-rose-200 bg-rose-50/50 px-4 py-3 text-xs font-semibold text-rose-700">
+        <div className="mt-4 rounded-2xl bg-rose-50 px-4 py-3 text-xs font-semibold text-rose-700">
           {errorMessage}
         </div>
       )}
 
       {message && !hasQuiz && (
-        <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-xs text-slate-600">
+        <div className="mt-4 rounded-2xl bg-slate-50 px-4 py-3 text-xs text-slate-600">
           {message}
         </div>
       )}
 
-      <div className="flex-1 mt-5">
+      <div className="flex-1 mt-6">
         {activeView === "stats" ? (
           <QuizStatsPanel
             statsQuery={statsQuery}

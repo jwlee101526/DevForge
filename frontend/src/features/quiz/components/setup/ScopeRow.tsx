@@ -37,10 +37,10 @@ export const ScopeRow: React.FC<ScopeRowProps> = ({
       onClick={disabled ? undefined : onClick}
       onKeyDown={handleKeyDown}
       className={cn(
-        "grid w-full grid-cols-[20px_minmax(0,1fr)_auto] items-center gap-3 rounded-md px-3 py-3 text-left",
-        "transition hover:bg-[#f7f4ec]",
+        "grid w-full grid-cols-[20px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl px-3.5 py-3 text-left transition-all",
+        "hover:bg-slate-100/70",
         disabled && "cursor-not-allowed opacity-50",
-        checked && "bg-[#f6f1e4]",
+        checked && "bg-indigo-50/60 font-bold",
       )}
     >
       <Checkbox
@@ -50,15 +50,15 @@ export const ScopeRow: React.FC<ScopeRowProps> = ({
         aria-hidden="true"
       />
       <span className="min-w-0">
-        <span className="block truncate text-sm font-extrabold text-slate-900">{title}</span>
+        <span className="block truncate text-sm font-bold text-slate-900">{title}</span>
         {description && (
-          <span className="mt-0.5 block truncate text-xs font-medium text-slate-500">
+          <span className="mt-0.5 block truncate text-xs text-slate-400">
             {description}
           </span>
         )}
       </span>
       <span className="flex items-center gap-3 text-right">
-        <span className="whitespace-nowrap text-sm font-black text-slate-900">
+        <span className="whitespace-nowrap text-sm font-extrabold text-slate-900">
           {Number(count || 0).toLocaleString()}개
         </span>
         {action}

@@ -8,12 +8,25 @@ import type {
   UserAnswerSubmission,
 } from "../types/quiz";
 
+import { useAuthStore } from "@/lib/authStore";
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
 
 async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
+  const { token } = useAuthStore.getState();
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const res = await fetch(`${API_BASE}${url}`, {
-    headers: { "Content-Type": "application/json" },
     ...options,
+    headers: {
+      ...headers,
+      ...(options?.headers as Record<string, string>),
+    },
   });
   if (!res.ok) {
     const body = await res.text().catch(() => "");

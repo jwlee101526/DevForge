@@ -94,7 +94,7 @@ export const QuizScopeSection: React.FC<QuizScopeSectionProps> = ({
                 updateScope({ scope_saved_date: true });
                 setGoalValue("saved_from", event.target.value);
               }}
-              className="h-9 rounded-md border-slate-200 bg-white text-sm font-semibold focus-visible:ring-[#0f766e]"
+              className="h-9 rounded-md border-slate-200 bg-white text-sm font-semibold focus-visible:ring-indigo-500/20"
             />
           </label>
           <label className="space-y-1.5">
@@ -107,7 +107,7 @@ export const QuizScopeSection: React.FC<QuizScopeSectionProps> = ({
                 updateScope({ scope_saved_date: true });
                 setGoalValue("saved_to", event.target.value);
               }}
-              className="h-9 rounded-md border-slate-200 bg-white text-sm font-semibold focus-visible:ring-[#0f766e]"
+              className="h-9 rounded-md border-slate-200 bg-white text-sm font-semibold focus-visible:ring-indigo-500/20"
             />
           </label>
         </div>

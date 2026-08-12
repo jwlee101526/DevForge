@@ -15,26 +15,52 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-/** 개념 카테고리·목록 조회와 단어장 저장을 담당한다. */
+/** 개념 카테고리·목록 조회와 단어장 저장을 담당하며, 계정별 개인 학습 이력을 분리 관리한다. */
 public class ConceptService {
 
     private final ConceptRepository conceptRepository;
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Transactional(readOnly = true)
-    /** 저장된 개념에서 중복 없는 카테고리를 조회한다. */
     public CategoryListResponse getCategories() {
-        List<String> tags = conceptRepository.findDistinctTags();
+        return getCategories(null);
+    }
+
+    @Transactional(readOnly = true)
+    public CategoryListResponse getCategories(UUID userId) {
+        List<String> tags;
+        if (userId != null) {
+            tags = conceptRepository.findDistinctTagsByUserIdAndScope(userId, "PERSONAL");
+            if (tags.isEmpty()) {
+                tags = conceptRepository.findDistinctTags();
+            }
+        } else {
+            tags = conceptRepository.findDistinctTags();
+        }
         return new CategoryListResponse(tags);
     }
 
     @Transactional(readOnly = true)
-    /** 개념 목록을 화면용 DTO와 학습 통계로 변환한다. */
     public ConceptListResponse getConcepts() {
-        List<Concept> concepts = conceptRepository.findAllByOrderByCreatedAtDesc();
+        return getConcepts(null);
+    }
+
+    @Transactional(readOnly = true)
+    public ConceptListResponse getConcepts(UUID userId) {
+        List<Concept> concepts;
+        if (userId != null) {
+            concepts = conceptRepository.findByUserIdAndScopeOrderByCreatedAtDesc(userId, "PERSONAL");
+            if (concepts.isEmpty()) {
+                concepts = conceptRepository.findAllByOrderByCreatedAtDesc();
+            }
+        } else {
+            concepts = conceptRepository.findAllByOrderByCreatedAtDesc();
+        }
+
         List<ConceptItemDto> items = concepts.stream().map(c -> new ConceptItemDto(
                 c.getId().toString(),
                 c.getWord(),
@@ -51,8 +77,12 @@ public class ConceptService {
     }
 
     @Transactional
-    /** 같은 단어의 중복 저장을 막고 새로운 개념을 단어장에 등록한다. */
     public Map<String, Object> saveConcept(SaveConceptRequest request) {
+        return saveConcept(request, null);
+    }
+
+    @Transactional
+    public Map<String, Object> saveConcept(SaveConceptRequest request, UUID userId) {
         Map<String, Object> result = new HashMap<>();
         if (request.suggestedWord() == null || request.suggestedWord().isBlank()) {
             result.put("success", false);
@@ -60,7 +90,13 @@ public class ConceptService {
             return result;
         }
 
-        Optional<Concept> existing = conceptRepository.findByWord(request.suggestedWord());
+        Optional<Concept> existing;
+        if (userId != null) {
+            existing = conceptRepository.findByWordAndUserIdAndScope(request.suggestedWord(), userId, "PERSONAL");
+        } else {
+            existing = conceptRepository.findByWord(request.suggestedWord());
+        }
+
         if (existing.isPresent()) {
             result.put("success", true);
             result.put("message", "already exists");
@@ -68,6 +104,8 @@ public class ConceptService {
         }
 
         Concept concept = new Concept();
+        concept.setUserId(userId);
+        concept.setScope("PERSONAL");
         concept.setWord(request.suggestedWord());
         concept.setKorean(request.suggestedKorean());
         concept.setEnglishDef(request.suggestedEnglishDef());

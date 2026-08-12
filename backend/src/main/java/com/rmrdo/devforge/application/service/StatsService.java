@@ -18,18 +18,24 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-/** 퀴즈 세션과 개념 학습 이력을 조회해 통계 화면용 결과를 구성한다. */
+/** 퀴즈 세션과 개념 학습 이력을 조회해 사용자별 통계 화면용 결과를 구성한다. */
 public class StatsService {
 
     private final QuizSessionRepository sessionRepository;
     private final ConceptRepository conceptRepository;
 
     @Transactional(readOnly = true)
-    /** 조회 기간을 해석하고 최근 세션 및 오답률이 높은 개념을 집계한다. */
     public QuizStatsResponse getStats(String start, String end) {
+        return getStats(start, end, null);
+    }
+
+    @Transactional(readOnly = true)
+    /** 조회 기간과 사용자를 고려하여 학습 통계 결과를 구성한다. */
+    public QuizStatsResponse getStats(String start, String end, UUID userId) {
         LocalDateTime from;
         try {
             from = (start != null && !start.isBlank()) ? LocalDate.parse(start).atStartOfDay() : LocalDateTime.now().minusDays(7);
@@ -44,8 +50,22 @@ public class StatsService {
             to = LocalDateTime.now().plusDays(1);
         }
 
-        List<QuizSession> sessions = sessionRepository.findByCreatedAtBetweenOrderByCreatedAtDesc(from, to, PageRequest.of(0, 50));
-        List<Concept> concepts = conceptRepository.findAllByOrderByCreatedAtDesc();
+        List<QuizSession> sessions;
+        List<Concept> concepts;
+
+        if (userId != null) {
+            sessions = sessionRepository.findByUserIdAndScopeAndCreatedAtBetweenOrderByCreatedAtDesc(userId, "PERSONAL", from, to, PageRequest.of(0, 50));
+            if (sessions.isEmpty()) {
+                sessions = sessionRepository.findByCreatedAtBetweenOrderByCreatedAtDesc(from, to, PageRequest.of(0, 50));
+            }
+            concepts = conceptRepository.findByUserIdAndScopeOrderByCreatedAtDesc(userId, "PERSONAL");
+            if (concepts.isEmpty()) {
+                concepts = conceptRepository.findAllByOrderByCreatedAtDesc();
+            }
+        } else {
+            sessions = sessionRepository.findByCreatedAtBetweenOrderByCreatedAtDesc(from, to, PageRequest.of(0, 50));
+            concepts = conceptRepository.findAllByOrderByCreatedAtDesc();
+        }
 
         List<ConceptStatDto> wordStats = concepts.stream()
                 .filter(c -> c.getAttemptCount() > 0)

@@ -21,7 +21,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "concepts", indexes = {
     @Index(name = "idx_concept_word", columnList = "word"),
-    @Index(name = "idx_concept_tag", columnList = "tag")
+    @Index(name = "idx_concept_tag", columnList = "tag"),
+    @Index(name = "idx_concept_user_scope", columnList = "userId,scope")
 })
 @Getter
 @Setter
@@ -34,6 +35,13 @@ public class Concept {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(name = "user_id")
+    private UUID userId;
+
+    @Column(length = 20)
+    @Builder.Default
+    private String scope = "PERSONAL";
 
     @Column(length = 500, nullable = false)
     @Builder.Default

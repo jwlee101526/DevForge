@@ -20,7 +20,7 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
         {...props}
       >
         <div
-          className={cn("h-full w-full flex-1 bg-[#14532d] transition-all duration-300", indicatorClassName)}
+          className={cn("h-full w-full flex-1 bg-indigo-600 transition-all duration-300", indicatorClassName)}
           style={{ transform: `translateX(-${100 - clampedValue}%)` }}
         />
       </div>

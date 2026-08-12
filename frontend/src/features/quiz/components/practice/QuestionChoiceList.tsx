@@ -22,7 +22,7 @@ export const QuestionChoiceList: React.FC<QuestionChoiceListProps> = ({
   chooseAnswer,
 }) => {
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       {choices.map((choice) => {
         const isSelected = answer.choice_id === choice.id;
         const isCorrectChoice = result?.correct_choice_id === choice.id;
@@ -34,33 +34,33 @@ export const QuestionChoiceList: React.FC<QuestionChoiceListProps> = ({
             onClick={() => chooseAnswer(questionId, choice.id)}
             disabled={hasGradeResult}
             className={cn(
-              "grid min-h-14 w-full grid-cols-[36px_1fr_auto] items-center gap-3 rounded-md border px-4 py-3 text-left transition",
-              "border-slate-200 bg-white text-slate-900 hover:border-[#14532d] hover:bg-[#f7faf5]",
-              isSelected && "border-[#14532d] bg-[#f3fbf6] ring-1 ring-[#14532d]/20",
-              isCorrectChoice && "border-emerald-500 bg-emerald-50",
-              isWrongSelected && "border-rose-500 bg-rose-50 animate-shake",
+              "grid min-h-14 w-full grid-cols-[36px_1fr_auto] items-center gap-3 rounded-2xl px-4 py-3.5 text-left transition-all",
+              "bg-slate-50/80 text-slate-900 hover:bg-indigo-50/50",
+              isSelected && "bg-indigo-50 text-indigo-950 font-bold shadow-xs",
+              isCorrectChoice && "bg-emerald-50 text-emerald-950 font-bold",
+              isWrongSelected && "bg-rose-50 text-rose-950 font-bold animate-shake",
               hasGradeResult && "cursor-default",
             )}
           >
             <span
               className={cn(
-                "flex h-8 w-8 items-center justify-center rounded-full border text-sm font-black",
+                "flex h-8 w-8 items-center justify-center rounded-full text-sm font-extrabold transition-colors",
                 isSelected
-                  ? "border-[#14532d] bg-[#14532d] text-white"
-                  : "border-slate-300 bg-white text-slate-700",
-                isWrongSelected && "border-rose-600 bg-rose-600",
-                isCorrectChoice && "border-emerald-600 bg-emerald-600",
+                  ? "bg-indigo-600 text-white"
+                  : "bg-white text-slate-700 shadow-2xs",
+                isWrongSelected && "bg-rose-600 text-white",
+                isCorrectChoice && "bg-emerald-600 text-white",
               )}
             >
               {choice.id}
             </span>
-            <span className="text-base font-semibold">{choice.text}</span>
+            <span className="text-base font-medium text-slate-900 leading-snug">{choice.text}</span>
             {isCorrectChoice ? (
               <HugeiconsIcon icon={CheckmarkCircle01Icon} className="h-5 w-5 text-emerald-600" />
             ) : isWrongSelected ? (
               <HugeiconsIcon icon={CancelCircleIcon} className="h-5 w-5 text-rose-600" />
             ) : isSelected ? (
-              <HugeiconsIcon icon={Tick01Icon} className="h-5 w-5 text-[#14532d]" />
+              <HugeiconsIcon icon={Tick01Icon} className="h-5 w-5 text-indigo-600" />
             ) : null}
           </button>
         );

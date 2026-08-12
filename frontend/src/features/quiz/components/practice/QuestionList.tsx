@@ -50,16 +50,16 @@ export const QuestionList: React.FC<QuestionListProps> = ({
   onSelect,
 }) => {
   return (
-    <aside className="rounded-lg border border-slate-200 bg-white">
-      <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4">
+    <aside className="rounded-2xl bg-slate-50/60 p-4">
+      <div className="flex items-center justify-between pb-3 px-1">
         <div>
-          <h3 className="text-sm font-black text-slate-950">문제 목록</h3>
-          <p className="mt-1 text-xs font-medium text-slate-500">번호를 눌러 이동합니다.</p>
+          <h3 className="text-sm font-extrabold text-slate-900">문제 목록</h3>
+          <p className="mt-0.5 text-xs text-slate-400">번호를 눌러 이동합니다.</p>
         </div>
-        <HugeiconsIcon icon={Task01Icon} className="h-4.5 w-4.5 text-slate-500" />
+        <HugeiconsIcon icon={Task01Icon} className="h-4.5 w-4.5 text-slate-400" />
       </div>
 
-      <div className="space-y-1 p-3">
+      <div className="space-y-1">
         {questions.map((question, index) => {
           const answer = answers[question.id] || {};
           const result = resultByQuestion[question.id];
@@ -73,17 +73,17 @@ export const QuestionList: React.FC<QuestionListProps> = ({
               type="button"
               onClick={() => onSelect(index)}
               className={cn(
-                "grid w-full grid-cols-[28px_1fr_auto] items-center gap-3 rounded-md px-3 py-2.5 text-left transition",
-                active ? "bg-[#f6edd8]" : "hover:bg-slate-50",
+                "grid w-full grid-cols-[28px_1fr_auto] items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-all",
+                active ? "bg-white shadow-2xs font-bold" : "hover:bg-white/60",
               )}
             >
               <span
                 className={cn(
-                  "flex h-7 w-7 items-center justify-center rounded-full text-xs font-black",
-                  active && "bg-amber-500 text-white",
-                  !active && !result && answered && "bg-[#14532d] text-white",
-                  !active && !result && !answered && "bg-slate-100 text-slate-500",
-                  status === "correct" && "bg-[#14532d] text-white",
+                  "flex h-7 w-7 items-center justify-center rounded-full text-xs font-extrabold transition-colors",
+                  active && "bg-indigo-600 text-white",
+                  !active && !result && answered && "bg-emerald-600 text-white",
+                  !active && !result && !answered && "bg-slate-200/70 text-slate-500",
+                  status === "correct" && "bg-emerald-600 text-white",
                   status === "partial" && "bg-amber-500 text-white",
                   status === "incorrect" && "bg-rose-600 text-white",
                 )}
@@ -91,19 +91,19 @@ export const QuestionList: React.FC<QuestionListProps> = ({
                 {index + 1}
               </span>
               <span className="min-w-0">
-                <span className="block truncate text-xs font-extrabold text-slate-800">
+                <span className="block truncate text-xs font-bold text-slate-800">
                   {questionTypeLabel(question.question_type)}
                 </span>
-                <span className="mt-0.5 block text-[11px] font-medium text-slate-500">
+                <span className="mt-0.5 block text-[11px] font-medium text-slate-400">
                   {status ? STATUS_LABELS[status] || status : answered ? "답변 완료" : active ? "현재" : "미답"}
                 </span>
               </span>
               {status === "correct" ? (
-                <HugeiconsIcon icon={Tick01Icon} className="h-4 w-4 text-[#14532d]" />
+                <HugeiconsIcon icon={Tick01Icon} className="h-4 w-4 text-emerald-600" />
               ) : status === "incorrect" ? (
                 <HugeiconsIcon icon={CancelCircleIcon} className="h-4 w-4 text-rose-600" />
               ) : answered ? (
-                <HugeiconsIcon icon={CircleDotIcon} className="h-4 w-4 text-[#14532d]" />
+                <HugeiconsIcon icon={CircleDotIcon} className="h-4 w-4 text-emerald-600" />
               ) : (
                 <HugeiconsIcon icon={CircleIcon} className="h-4 w-4 text-slate-300" />
               )}
@@ -112,21 +112,21 @@ export const QuestionList: React.FC<QuestionListProps> = ({
         })}
       </div>
 
-      <div className="grid grid-cols-2 gap-3 border-t border-slate-200 p-4 text-xs font-bold text-slate-600">
-        <span className="inline-flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full bg-[#14532d]" />
+      <div className="grid grid-cols-2 gap-2.5 pt-4 mt-2 border-t border-slate-200/60 px-1 text-xs font-bold text-slate-500">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-600" />
           정답/완료
         </span>
-        <span className="inline-flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full bg-rose-600" />
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full bg-rose-600" />
           오답
         </span>
-        <span className="inline-flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full bg-amber-500" />
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full bg-indigo-600" />
           현재
         </span>
-        <span className="inline-flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full border border-slate-300" />
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full bg-slate-200" />
           미답
         </span>
       </div>

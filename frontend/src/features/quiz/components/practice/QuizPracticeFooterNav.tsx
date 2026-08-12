@@ -28,13 +28,13 @@ export const QuizPracticeFooterNav: React.FC<QuizPracticeFooterNavProps> = ({
   onGrade,
 }) => {
   return (
-    <div className="mt-6 flex flex-col gap-3 rounded-md border border-slate-200 bg-white p-3 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mt-6 flex flex-col gap-3 rounded-2xl bg-slate-50/70 p-3 sm:flex-row sm:items-center sm:justify-between">
       <Button
         type="button"
-        variant="outline"
+        variant="ghost"
         disabled={!canGoPrev}
         onClick={onPrev}
-        className="h-12 rounded-md border-slate-300 px-6 text-base font-black"
+        className="h-12 rounded-xl px-6 text-base font-extrabold text-slate-700 hover:bg-white"
       >
         <HugeiconsIcon icon={ArrowLeft01Icon} className="h-4 w-4" />
         이전 문제
@@ -46,7 +46,7 @@ export const QuizPracticeFooterNav: React.FC<QuizPracticeFooterNavProps> = ({
             type="button"
             onClick={onGrade}
             disabled={!canSubmit || gradeLoading}
-            className="h-12 rounded-md bg-[#064e1f] px-10 text-base font-black text-white hover:bg-[#053f19] disabled:bg-slate-200 disabled:text-slate-500"
+            className="h-12 rounded-full bg-indigo-600 px-10 text-base font-extrabold text-white shadow-xs hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400"
           >
             <HugeiconsIcon icon={Flag01Icon} className="h-4 w-4" />
             {gradeLoading ? "채점 중..." : "답안 제출"}
@@ -54,14 +54,14 @@ export const QuizPracticeFooterNav: React.FC<QuizPracticeFooterNavProps> = ({
         ) : (
           <Button
             type="button"
-            variant={hasGradeResult ? "outline" : "default"}
+            variant={hasGradeResult ? "ghost" : "default"}
             disabled={!canGoNext}
             onClick={onNext}
             className={cn(
-              "h-12 rounded-md px-8 text-base font-black",
+              "h-12 rounded-full px-8 text-base font-extrabold shadow-xs",
               hasGradeResult
-                ? "border-slate-300"
-                : "bg-[#064e1f] text-white hover:bg-[#053f19]",
+                ? "text-slate-700 hover:bg-white"
+                : "bg-indigo-600 text-white hover:bg-indigo-700",
             )}
           >
             다음 문제
