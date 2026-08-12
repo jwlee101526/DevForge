@@ -6,5 +6,5 @@
 *.tfstate.*
 infra/terraform.tfvars
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
