@@ -71,8 +71,8 @@ export const SignupPage: React.FC = () => {
       const data = await signupApi(trimmedEmail, password, trimmedName);
       setAuth(data.token, data.user);
       navigate("/quiz", { replace: true });
-    } catch (err: any) {
-      setStatusError(err.message || "회원가입 요청 실패. 다시 시도해 주세요.");
+    } catch (err) {
+      setStatusError((err as Error).message || "회원가입 요청 실패. 다시 시도해 주세요.");
     } finally {
       setLoading(false);
     }

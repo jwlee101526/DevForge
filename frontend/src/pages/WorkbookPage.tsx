@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Book02Icon, SparklesIcon, CheckmarkCircle01Icon, PlayIcon, RefreshIcon } from "@hugeicons/core-free-icons";
+import { Book02Icon, SparklesIcon, CheckmarkCircle01Icon, PlayIcon } from "@hugeicons/core-free-icons";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import AppSidebar from "@/components/layout/AppSidebar";
 import CodePassage from "@/features/quiz/components/practice/CodePassage";
 import { useQuizStore } from "@/features/quiz/model/useQuizStore";
+import type { Question } from "@/features/quiz/types/quiz";
 import { cn } from "@/lib/utils";
 
 interface WorkbookItem {
@@ -18,6 +19,23 @@ interface WorkbookItem {
   difficulty: string;
 }
 
+interface QuestionChoice {
+  id: string;
+  text: string;
+}
+
+interface QuestionItem {
+  id?: string;
+  prompt?: string;
+  passage?: string;
+  choices?: QuestionChoice[];
+  correct_choice_id?: string;
+  correctChoiceId?: string;
+  correct_text?: string;
+  explanation?: string;
+  question_type?: string;
+}
+
 export const WorkbookPage: React.FC = () => {
   const navigate = useNavigate();
   const setGeneratedQuestions = useQuizStore((s) => s.setGeneratedQuestions);
@@ -26,7 +44,7 @@ export const WorkbookPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [activeWorkbook, setActiveWorkbook] = useState<WorkbookItem | null>(null);
   const [tweakWithLlm, setTweakWithLlm] = useState(false);
-  const [questions, setQuestions] = useState<any[]>([]);
+  const [questions, setQuestions] = useState<QuestionItem[]>([]);
   const [fetchingQuestions, setFetchingQuestions] = useState(false);
 
   // Interactive local answer state for inline practice
@@ -61,7 +79,16 @@ export const WorkbookPage: React.FC = () => {
 
   const startQuizPracticeSession = () => {
     if (!questions || questions.length === 0) return;
-    setGeneratedQuestions(questions, "workbook_" + (activeWorkbook?.id || "custom"));
+    const formattedQuestions: Question[] = questions.map((q, idx) => ({
+      id: q.id || `q-${idx}`,
+      question_type: q.question_type || "multiple_choice",
+      difficulty: "medium",
+      prompt: q.prompt || "",
+      passage: q.passage,
+      answer_format: q.choices && q.choices.length > 0 ? "choice" : "text",
+      choices: (q.choices || []).map((c) => ({ id: c.id, text: c.text })),
+    }));
+    setGeneratedQuestions(formattedQuestions, "workbook_" + (activeWorkbook?.id || "custom"));
     navigate("/quiz");
   };
 
@@ -227,7 +254,7 @@ export const WorkbookPage: React.FC = () => {
                       {/* Choices or Text Answer Input */}
                       {isChoiceType ? (
                         <div className="grid gap-2.5 sm:grid-cols-2">
-                          {q.choices.map((c: any) => {
+                          {q.choices?.map((c) => {
                             const isSelectedChoice = selectedUserAnswer === c.id;
                             const isAnswerKeyChoice = isRevealed && c.id.toUpperCase() === correctChoiceId.toUpperCase();
                             return (

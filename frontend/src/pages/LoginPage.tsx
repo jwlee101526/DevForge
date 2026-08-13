@@ -58,8 +58,8 @@ export const LoginPage: React.FC = () => {
       }
       setAuth(data.token, data.user);
       navigate("/quiz", { replace: true });
-    } catch (err: any) {
-      setStatusError(err.message || "로그인 요청 실패. 잠시 후 다시 시도해주세요.");
+    } catch (err) {
+      setStatusError((err as Error).message || "로그인 요청 실패. 잠시 후 다시 시도해주세요.");
     } finally {
       setLoading(false);
     }
@@ -189,8 +189,8 @@ export const LoginPage: React.FC = () => {
                   const data = await socialLoginApi("GITHUB", "demo_code", window.location.origin, "developer@github.com", "GitHub Developer", "gh-1001");
                   setAuth(data.token, data.user);
                   navigate("/quiz", { replace: true });
-                } catch (err: any) {
-                  setStatusError(err.message);
+                } catch (err) {
+                  setStatusError((err as Error).message);
                 } finally {
                   setLoading(false);
                 }
@@ -209,8 +209,8 @@ export const LoginPage: React.FC = () => {
                   const data = await socialLoginApi("GOOGLE", "demo_code", window.location.origin, "developer@google.com", "Google Developer", "gg-2002");
                   setAuth(data.token, data.user);
                   navigate("/quiz", { replace: true });
-                } catch (err: any) {
-                  setStatusError(err.message);
+                } catch (err) {
+                  setStatusError((err as Error).message);
                 } finally {
                   setLoading(false);
                 }
@@ -229,8 +229,8 @@ export const LoginPage: React.FC = () => {
                   const data = await socialLoginApi("KAKAO", "demo_code", window.location.origin, "kakao_user@kakao.com", "카카오 개발자", "kk-3003");
                   setAuth(data.token, data.user);
                   navigate("/quiz", { replace: true });
-                } catch (err: any) {
-                  setStatusError(err.message);
+                } catch (err) {
+                  setStatusError((err as Error).message);
                 } finally {
                   setLoading(false);
                 }

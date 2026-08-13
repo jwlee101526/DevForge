@@ -15,6 +15,13 @@ import {
 } from "@/features/api/bookmarkApi";
 import type { BookmarkGroupDto, BookmarkedQuestionDto } from "@/features/api/bookmarkApi";
 
+interface ParsedBookmarkQuestion {
+  prompt?: string;
+  passage?: string;
+  correct_choice_id?: string;
+  correct_text?: string;
+}
+
 export const BookmarkManagementPage: React.FC = () => {
   const [groups, setGroups] = useState<BookmarkGroupDto[]>([]);
   const [bookmarks, setBookmarks] = useState<BookmarkedQuestionDto[]>([]);
@@ -40,7 +47,20 @@ export const BookmarkManagementPage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchBookmarkData();
+    let isMounted = true;
+    Promise.all([
+      fetchBookmarkGroupsApi().catch(() => []),
+      fetchBookmarkedQuestionsApi().catch(() => []),
+    ]).then(([groupsRes, bookmarksRes]) => {
+      if (isMounted) {
+        setGroups(groupsRes || []);
+        setBookmarks(bookmarksRes || []);
+        setLoading(false);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleCreateGroup = async (e: React.FormEvent) => {
@@ -207,10 +227,12 @@ export const BookmarkManagementPage: React.FC = () => {
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filteredBookmarks.map((bm) => {
-              let parsedQ: any = {};
+              let parsedQ: ParsedBookmarkQuestion = {};
               try {
-                parsedQ = JSON.parse(bm.questionJson || "{}");
-              } catch {}
+                parsedQ = JSON.parse(bm.questionJson || "{}") as ParsedBookmarkQuestion;
+              } catch {
+                /* ignore parse error */
+              }
 
               return (
                 <Card

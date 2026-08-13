@@ -12,8 +12,6 @@ import {
   ZapIcon,
   CheckmarkCircle01Icon,
   ArrowRight01Icon,
-  CpuIcon,
-  Award01Icon,
 } from "@hugeicons/core-free-icons";
 import { Badge } from "@/components/ui/badge";
 import { useAuthStore } from "@/lib/authStore";

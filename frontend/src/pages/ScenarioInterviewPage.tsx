@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { CpuIcon, SparklesIcon, UserIcon, ZapIcon, Loading01Icon, Award01Icon, Target01Icon, AlertCircleIcon } from "@hugeicons/core-free-icons";
+import { CpuIcon, SparklesIcon, UserIcon, ZapIcon, Loading01Icon, Award01Icon } from "@hugeicons/core-free-icons";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
