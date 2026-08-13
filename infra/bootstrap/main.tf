@@ -45,6 +45,22 @@ resource "azuread_application_federated_identity_credential" "deploy_branch_immu
   subject        = "repo:${var.github_repository_immutable}:ref:refs/heads/${var.deploy_branch}"
 }
 
+resource "azuread_application_federated_identity_credential" "production_environment" {
+  application_id = azuread_application.github_actions.id
+  display_name   = "production-environment"
+  audiences      = ["api://AzureADTokenExchange"]
+  issuer         = "https://token.actions.githubusercontent.com"
+  subject        = "repo:${var.github_repository}:environment:production"
+}
+
+resource "azuread_application_federated_identity_credential" "production_environment_immutable" {
+  application_id = azuread_application.github_actions.id
+  display_name   = "production-environment-immutable"
+  audiences      = ["api://AzureADTokenExchange"]
+  issuer         = "https://token.actions.githubusercontent.com"
+  subject        = "repo:${var.github_repository_immutable}:environment:production"
+}
+
 resource "azurerm_role_assignment" "subscription_contributor" {
   scope                = "/subscriptions/${var.subscription_id}"
   role_definition_name = "Contributor"
