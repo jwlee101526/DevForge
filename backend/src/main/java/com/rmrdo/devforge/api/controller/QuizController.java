@@ -40,14 +40,14 @@ public class QuizController implements QuizControllerDocs {
     @GetMapping("/categories")
     public ResponseEntity<CategoryListResponse> getCategories(
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
-        UUID userId = securityUtils.extractUserIdStrict(authHeader);
+        UUID userId = securityUtils.extractUserId(authHeader);
         return ResponseEntity.ok(conceptService.getCategories(userId));
     }
 
     @GetMapping("/concepts")
     public ResponseEntity<ConceptListResponse> getConcepts(
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
-        UUID userId = securityUtils.extractUserIdStrict(authHeader);
+        UUID userId = securityUtils.extractUserId(authHeader);
         return ResponseEntity.ok(conceptService.getConcepts(userId));
     }
 
@@ -56,14 +56,14 @@ public class QuizController implements QuizControllerDocs {
             @RequestParam(required = false) String start,
             @RequestParam(required = false) String end,
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
-        UUID userId = securityUtils.extractUserIdStrict(authHeader);
+        UUID userId = securityUtils.extractUserId(authHeader);
         return ResponseEntity.ok(statsService.getStats(start, end, userId));
     }
 
     @GetMapping("/weaknesses")
     public ResponseEntity<com.rmrdo.devforge.application.dto.response.WeaknessAnalyticsDto> getWeaknesses(
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
-        UUID userId = securityUtils.extractUserIdStrict(authHeader);
+        UUID userId = securityUtils.extractUserId(authHeader);
         return ResponseEntity.ok(weaknessService.getWeaknessAnalytics(userId));
     }
 
@@ -71,7 +71,7 @@ public class QuizController implements QuizControllerDocs {
     public ResponseEntity<QuizGenerateResponse> generateQuiz(
             @RequestBody QuizGenerateRequest request,
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
-        UUID userId = securityUtils.extractUserIdStrict(authHeader);
+        UUID userId = securityUtils.extractUserId(authHeader);
         return ResponseEntity.ok(quizService.generateQuiz(request, userId));
     }
 
@@ -84,7 +84,7 @@ public class QuizController implements QuizControllerDocs {
     public ResponseEntity<Map<String, Object>> saveConcept(
             @RequestBody SaveConceptRequest request,
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
-        UUID userId = securityUtils.extractUserIdStrict(authHeader);
+        UUID userId = securityUtils.extractUserId(authHeader);
         Map<String, Object> result = conceptService.saveConcept(request, userId);
         if (Boolean.FALSE.equals(result.get("success"))) {
             return ResponseEntity.badRequest().body(result);
@@ -96,7 +96,7 @@ public class QuizController implements QuizControllerDocs {
     public ResponseEntity<Map<String, Object>> getSession(
             @PathVariable UUID id,
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
-        UUID userId = securityUtils.extractUserIdStrict(authHeader);
+        UUID userId = securityUtils.extractUserId(authHeader);
         Map<String, Object> sessionData = quizService.getSession(id, userId);
         if (sessionData == null) {
             return ResponseEntity.notFound().build();
@@ -115,7 +115,7 @@ public class QuizController implements QuizControllerDocs {
     @GetMapping("/stats/rank")
     public ResponseEntity<com.rmrdo.devforge.application.dto.response.UserRankDto> getUserRank(
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
-        UUID userId = securityUtils.extractUserIdStrict(authHeader);
+        UUID userId = securityUtils.extractUserId(authHeader);
         return ResponseEntity.ok(userGradeService.getUserGrade(userId));
     }
 }
