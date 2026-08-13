@@ -5,7 +5,7 @@ import { ViewIcon, ViewOffIcon, Loading01Icon } from "@hugeicons/core-free-icons
 import AuthCard from "@/components/auth/AuthCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { signupApi } from "@/features/auth/api/authApi";
+import { getSocialAuthorizationUrl, signupApi } from "@/features/auth/api/authApi";
 import { useAuthStore } from "@/lib/authStore";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -211,6 +211,50 @@ export const SignupPage: React.FC = () => {
             "회원가입 완료"
           )}
         </Button>
+
+        <div className="pt-3 pb-1">
+          <div className="relative flex items-center justify-center">
+            <div className="w-full border-t border-slate-200"></div>
+            <span className="absolute bg-white px-3 text-[11px] font-semibold text-slate-400">
+              간편 소셜 회원가입
+            </span>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2 mt-4">
+            <button
+              type="button"
+              disabled={loading}
+              onClick={() => {
+                window.location.href = getSocialAuthorizationUrl("github", "signup");
+              }}
+              className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-slate-200 bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-colors shadow-xs cursor-pointer"
+            >
+              <span>GitHub</span>
+            </button>
+
+            <button
+              type="button"
+              disabled={loading}
+              onClick={() => {
+                window.location.href = getSocialAuthorizationUrl("google", "signup");
+              }}
+              className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-slate-200 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition-colors shadow-xs cursor-pointer"
+            >
+              <span className="text-blue-500 font-bold">G</span>oogle
+            </button>
+
+            <button
+              type="button"
+              disabled={loading}
+              onClick={() => {
+                window.location.href = getSocialAuthorizationUrl("kakao", "signup");
+              }}
+              className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-yellow-300 bg-[#FEE500] text-slate-900 text-xs font-semibold hover:bg-[#FDD800] transition-colors shadow-xs cursor-pointer"
+            >
+              <span>Kakao</span>
+            </button>
+          </div>
+        </div>
       </form>
     </AuthCard>
   );

@@ -12,6 +12,7 @@ import QuizTestPage from "@/pages/QuizTestPage";
 import ScenarioInterviewPage from "@/pages/ScenarioInterviewPage";
 import SparringPage from "@/pages/SparringPage";
 import SignupPage from "@/pages/SignupPage";
+import SocialAuthCallbackPage from "@/pages/SocialAuthCallbackPage";
 import WorkbookPage from "@/pages/WorkbookPage";
 
 export const AppRoutes: React.FC = () => {
@@ -21,6 +22,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/auth/social/callback" element={<SocialAuthCallbackPage />} />
         <Route path="/quiz" element={<QuizPage />} />
         <Route path="/quiz/test" element={<QuizTestPage />} />
         <Route path="/questions" element={<QuestionExplorerPage />} />

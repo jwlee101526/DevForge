@@ -1,5 +1,5 @@
 import type { User } from "@/lib/authStore";
-import { API_V1_BASE } from "@/lib/apiClient";
+import { API_BASE_URL, API_V1_BASE } from "@/lib/apiClient";
 
 const API_BASE = API_V1_BASE;
 
@@ -62,4 +62,8 @@ export async function socialLoginApi(
     throw new Error(errorData.message || "소셜 로그인 연동에 실패했습니다.");
   }
   return res.json();
+}
+
+export function getSocialAuthorizationUrl(provider: string, mode: "login" | "signup"): string {
+  return `${API_BASE_URL}/oauth2/authorization/${provider.toLowerCase()}?mode=${mode}`;
 }

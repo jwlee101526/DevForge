@@ -3,6 +3,7 @@ package com.rmrdo.devforge.api.controller;
 import com.rmrdo.devforge.api.controller.docs.AuthControllerDocs;
 import com.rmrdo.devforge.application.dto.request.LoginRequest;
 import com.rmrdo.devforge.application.dto.request.SignupRequest;
+import com.rmrdo.devforge.application.dto.request.SocialLoginRequest;
 import com.rmrdo.devforge.application.dto.response.AuthResponse;
 import com.rmrdo.devforge.application.dto.response.UserDto;
 import com.rmrdo.devforge.application.service.AuthService;
@@ -33,7 +34,12 @@ public class AuthController implements AuthControllerDocs {
     }
 
     @PostMapping("/social/login")
-    public ResponseEntity<AuthResponse> socialLogin(@Valid @RequestBody com.rmrdo.devforge.application.dto.request.SocialLoginRequest request) {
+    public ResponseEntity<AuthResponse> socialLogin(@Valid @RequestBody SocialLoginRequest request) {
+        return ResponseEntity.ok(authService.socialLogin(request));
+    }
+
+    @PostMapping("/social/signup")
+    public ResponseEntity<AuthResponse> socialSignup(@Valid @RequestBody SocialLoginRequest request) {
         return ResponseEntity.ok(authService.socialLogin(request));
     }
 

@@ -5,7 +5,7 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  envDir: '../',
+  envDir: './',
   plugins: [
     react(),
     babel({ presets: [reactCompilerPreset()] })

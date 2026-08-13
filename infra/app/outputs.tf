@@ -13,9 +13,9 @@ output "web_app_url" {
   value       = "https://${azurerm_linux_web_app.main.default_hostname}"
 }
 
-output "providers_endpoint" {
-  description = "헬스 체크용 AI provider API."
-  value       = "https://${azurerm_linux_web_app.main.default_hostname}/api/quiz/providers"
+output "health_endpoint" {
+  description = "헬스 체크용 API."
+  value       = "https://${azurerm_linux_web_app.main.default_hostname}/api/v1/health"
 }
 
 output "ssh_login_command" {

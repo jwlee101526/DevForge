@@ -67,7 +67,7 @@ resource "azurerm_linux_web_app" "main" {
     always_on                         = true
     ftps_state                        = "Disabled"
     health_check_eviction_time_in_min = 2
-    health_check_path                 = "/api/v1/quiz/providers"
+    health_check_path                 = "/api/v1/health"
     minimum_tls_version               = "1.2"
     scm_minimum_tls_version           = "1.2"
     use_32_bit_worker                 = false

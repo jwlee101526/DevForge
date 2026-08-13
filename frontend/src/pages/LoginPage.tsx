@@ -6,7 +6,7 @@ import AuthCard from "@/components/auth/AuthCard";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { loginApi } from "@/features/auth/api/authApi";
+import { getSocialAuthorizationUrl, loginApi } from "@/features/auth/api/authApi";
 import { useAuthStore } from "@/lib/authStore";
 
 const REMEMBERED_EMAIL_KEY = "devforge.rememberedEmail";
@@ -184,8 +184,7 @@ export const LoginPage: React.FC = () => {
               type="button"
               disabled={loading}
               onClick={() => {
-                const baseUrl = import.meta.env.VITE_API_BASE_URL || "";
-                window.location.href = `${baseUrl}/oauth2/authorization/github`;
+                window.location.href = getSocialAuthorizationUrl("github", "login");
               }}
               className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-slate-200 bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-colors shadow-xs cursor-pointer"
             >
@@ -196,8 +195,7 @@ export const LoginPage: React.FC = () => {
               type="button"
               disabled={loading}
               onClick={() => {
-                const baseUrl = import.meta.env.VITE_API_BASE_URL || "";
-                window.location.href = `${baseUrl}/oauth2/authorization/google`;
+                window.location.href = getSocialAuthorizationUrl("google", "login");
               }}
               className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-slate-200 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition-colors shadow-xs cursor-pointer"
             >
@@ -208,8 +206,7 @@ export const LoginPage: React.FC = () => {
               type="button"
               disabled={loading}
               onClick={() => {
-                const baseUrl = import.meta.env.VITE_API_BASE_URL || "";
-                window.location.href = `${baseUrl}/oauth2/authorization/kakao`;
+                window.location.href = getSocialAuthorizationUrl("kakao", "login");
               }}
               className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-yellow-300 bg-[#FEE500] text-slate-900 text-xs font-semibold hover:bg-[#FDD800] transition-colors shadow-xs cursor-pointer"
             >

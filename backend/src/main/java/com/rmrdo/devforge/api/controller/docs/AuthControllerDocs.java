@@ -37,6 +37,9 @@ public interface AuthControllerDocs {
     @Operation(summary = "Social Login", description = "GitHub, Google, Kakao 등의 소셜 계정 정보로 로그인합니다.")
     ResponseEntity<AuthResponse> socialLogin(SocialLoginRequest request);
 
+    @Operation(summary = "Social Signup", description = "GitHub, Google, Kakao 등의 소셜 계정 정보로 신규 계정을 생성하거나 기존 계정에 연결합니다.")
+    ResponseEntity<AuthResponse> socialSignup(SocialLoginRequest request);
+
     @Operation(summary = "Get Social Providers", description = "지원하는 소셜 로그인 프로바이더(GitHub, Google, Kakao) 정보를 조회합니다.")
     ResponseEntity<List<Map<String, String>>> getSocialProviders();
 
