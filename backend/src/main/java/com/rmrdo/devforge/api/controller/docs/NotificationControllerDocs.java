@@ -7,15 +7,27 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
-@Tag(name = "알림 API", description = "매일 정해진 시간에 제공되는 데일리 복습 푸시/이메일 알림 설정")
+@Tag(
+    name = "Notification API",
+    description = """
+        매일 지정된 시간에 발송되는 데일리 복습 퀴즈 푸시 및 이메일 알림 설정 API입니다.
+        
+        ### 주요 기능
+        - **알림 설정**: 데일리 알림 수신 시간 및 수신 채널(이메일/푸시) 변경
+        - **수동 트리거**: 데일리 복습 알림 즉시 발송 테스트
+        
+        ### 보안 요구사항
+        - `Authorization: Bearer <JWT_TOKEN>` 헤더 필수
+        """
+)
 public interface NotificationControllerDocs {
 
-    @Operation(summary = "알림 구독 등록/수정", description = "사용자의 데일리 퀴즈 푸시 및 이메일 알림 시간/서브스크립션을 등록하거나 변경합니다.")
+    @Operation(summary = "Subscribe or Update Daily Notification", description = "사용자의 데일리 퀴즈 푸시 및 이메일 알림 시간/서브스크립션을 등록하거나 변경합니다.")
     ResponseEntity<Map<String, Object>> subscribe(Map<String, Object> payload, String authHeader);
 
-    @Operation(summary = "알림 구독 현황 조회", description = "현재 사용자의 데일리 알림 설정 정보를 조회합니다.")
+    @Operation(summary = "Get Notification Subscription Status", description = "현재 사용자의 데일리 알림 설정 정보를 조회합니다.")
     ResponseEntity<DailyNotificationSubscription> getSubscription(String authHeader);
 
-    @Operation(summary = "데일리 알림 수동 발송 테스트", description = "테스트용으로 데일리 복습 퀴즈 알림을 즉시 트리거합니다.")
+    @Operation(summary = "Trigger Daily Notification Manually", description = "테스트용으로 데일리 복습 퀴즈 알림을 즉시 트리거합니다.")
     ResponseEntity<Map<String, Object>> triggerDaily(String authHeader);
 }
