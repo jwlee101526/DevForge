@@ -17,10 +17,10 @@ interface InterviewTurn {
 }
 
 export const ScenarioInterviewPage: React.FC = () => {
-  const [techStack, setTechStack] = useState("Java / Spring Boot");
+  const [techStack, setTechStack] = useState("Spring Boot / MSA");
   const [started, setStarted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState("AI 수석 면접관 컨텍스트 구성 중...");
+  const [loadingMessage, setLoadingMessage] = useState("");
   const [sessionId, setSessionId] = useState("");
   const [turns, setTurns] = useState<InterviewTurn[]>([]);
   const [userAnswerInput, setUserAnswerInput] = useState("");
@@ -30,18 +30,14 @@ export const ScenarioInterviewPage: React.FC = () => {
     setLoading(true);
     setLoadingMessage("AI 수석 면접관 컨텍스트 구성 및 실무 시나리오 출제 중...");
     try {
-      const res = await fetch("/api/v1/scenario/start", {
+      const json = await fetchApi<{ sessionId?: string; question?: { prompt?: string } }>("/scenario/start", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ techStack }),
       });
-      if (res.ok) {
-        const json = await res.json();
-        setSessionId(json.sessionId || "sc_1");
-        const qPrompt = json.question?.prompt || `${techStack} 환경의 대용량 아키텍처 및 트러블슈팅 경험을 설명하세요.`;
-        setTurns([{ role: "interviewer", content: qPrompt }]);
-        setStarted(true);
-      }
+      setSessionId(json.sessionId || "sc_1");
+      const qPrompt = json.question?.prompt || `${techStack} 환경의 대용량 아키텍처 및 트러블슈팅 경험을 설명하세요.`;
+      setTurns([{ role: "interviewer", content: qPrompt }]);
+      setStarted(true);
     } catch (err) {
       console.error("Failed to start scenario interview", err);
     } finally {
@@ -61,26 +57,29 @@ export const ScenarioInterviewPage: React.FC = () => {
     setLoadingMessage("제출 답변 심층 분석 및 꼬리질문 생성 중...");
 
     try {
-      const res = await fetch("/api/v1/scenario/followup", {
+      const json = await fetchApi<{ 
+        followupQuestion?: string; 
+        score?: number; 
+        technicalAccuracy?: number;
+        communicationScore?: number;
+        feedback?: string;
+        weakPoint?: string;
+      }>("/scenario/followup", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sessionId, question: currentQuestion, userAnswer: answerText }),
       });
-      if (res.ok) {
-        const json = await res.json();
-        setTurns((prev) => [
-          ...prev,
-          {
-            role: "interviewer",
-            content: json.followupQuestion || "추가 답변에 대한 트레이드오프를 설명해 주세요.",
-            score: json.score || 85,
-            technicalAccuracy: json.technicalAccuracy || 88,
-            communicationScore: json.communicationScore || 82,
-            feedback: json.feedback || "기술적 관점이 돋보이는 논리적 답변입니다.",
-            weakPoint: json.weakPoint || "예외 상황에 대한 백오프 전략 설명이 보완 가능합니다.",
-          },
-        ]);
-      }
+      setTurns((prev) => [
+        ...prev,
+        {
+          role: "interviewer",
+          content: json.followupQuestion || "추가 답변에 대한 트레이드오프를 설명해 주세요.",
+          score: json.score || 85,
+          technicalAccuracy: json.technicalAccuracy || 88,
+          communicationScore: json.communicationScore || 82,
+          feedback: json.feedback || "기술적 관점이 돋보이는 논리적 답변입니다.",
+          weakPoint: json.weakPoint || "예외 상황에 대한 백오프 전략 설명이 보완 가능합니다.",
+        },
+      ]);
     } catch (err) {
       console.error("Failed to fetch followup", err);
     } finally {

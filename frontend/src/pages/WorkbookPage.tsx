@@ -5,6 +5,7 @@ import { Book02Icon, SparklesIcon, CheckmarkCircle01Icon, PlayIcon } from "@huge
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import AppSidebar from "@/components/layout/AppSidebar";
+import { fetchApi } from "@/lib/apiClient";
 import CodePassage from "@/features/quiz/components/practice/CodePassage";
 import { useQuizStore } from "@/features/quiz/model/useQuizStore";
 import type { Question } from "@/features/quiz/types/quiz";
@@ -52,8 +53,7 @@ export const WorkbookPage: React.FC = () => {
   const [showResults, setShowResults] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    fetch("/api/v1/workbooks")
-      .then((res) => (res.ok ? res.json() : []))
+    fetchApi<WorkbookItem[]>("/workbooks")
       .then((data) => setWorkbooks(data))
       .catch((err) => console.error("Failed to load workbooks", err))
       .finally(() => setLoading(false));
@@ -65,11 +65,8 @@ export const WorkbookPage: React.FC = () => {
     setUserAnswers({});
     setShowResults({});
     try {
-      const res = await fetch(`/api/v1/workbooks/${wb.id}/questions?tweakWithLlm=${tweak}`);
-      if (res.ok) {
-        const json = await res.json();
-        setQuestions(json.questions || []);
-      }
+      const json = await fetchApi<{ questions?: QuestionItem[] }>(`/workbooks/${wb.id}/questions?tweakWithLlm=${tweak}`);
+      setQuestions(json.questions || []);
     } catch (err) {
       console.error("Failed to fetch workbook questions", err);
     } finally {

@@ -7,12 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import AppSidebar from "@/components/layout/AppSidebar";
 
+import { fetchApi } from "@/lib/apiClient";
+
 export const CustomQuestionCreatePage: React.FC = () => {
   const navigate = useNavigate();
   const [word, setWord] = useState("");
   const [korean, setKorean] = useState("");
   const [example, setExample] = useState("");
-  const [tag, setTag] = useState("Java");
+  const [tag, setTag] = useState("React");
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
 
@@ -23,15 +25,12 @@ export const CustomQuestionCreatePage: React.FC = () => {
     setSuccessMsg("");
 
     try {
-      const res = await fetch("/api/v1/questions/custom", {
+      await fetchApi("/questions/custom", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ word: word.trim(), korean: korean.trim(), example: example.trim(), tag: tag.trim() }),
       });
-      if (res.ok) {
-        setSuccessMsg("자작 문제/개념이 성공적으로 생성되었습니다!");
-        setTimeout(() => navigate("/questions"), 1200);
-      }
+      setSuccessMsg("자작 문제/개념이 성공적으로 생성되었습니다!");
+      setTimeout(() => navigate("/questions"), 1200);
     } catch (err) {
       console.error("Failed to create custom question", err);
     } finally {
