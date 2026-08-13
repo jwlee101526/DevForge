@@ -174,3 +174,11 @@ jobs:
       - name: Terraform apply
         working-directory: infra/app
         run: terraform apply -auto-approve
+
+      - name: Deploy package via Azure CLI
+        run: |
+          WEBAPP_NAME=$(az webapp list --resource-group rg-devforge-prod --query "[0].name" -o tsv)
+          if [ -n "$WEBAPP_NAME" ]; then
+            echo "Deploying backend/build/libs/app.jar to $WEBAPP_NAME..."
+            az webapp deploy --resource-group rg-devforge-prod --name "$WEBAPP_NAME" --src-path backend/build/libs/app.jar --type jar --clean true
+          fi

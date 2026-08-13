@@ -18,6 +18,7 @@ locals {
     WEBSITES_PORT                       = "8080"
     SCM_DO_BUILD_DURING_DEPLOYMENT      = "false"
     ENABLE_ORYX_BUILD                   = "false"
+    DEPLOYMENT_PACKAGE_HASH             = fileexists(var.package_path) ? filemd5(var.package_path) : "1"
   }
 
   common_tags = merge(
