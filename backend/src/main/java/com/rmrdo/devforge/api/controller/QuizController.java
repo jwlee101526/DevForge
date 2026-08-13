@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.UUID;
 
+import com.rmrdo.devforge.application.service.UserGradeService;
+
 @RestController
 @RequestMapping("/api/v1/quiz")
 @RequiredArgsConstructor
@@ -31,6 +33,7 @@ public class QuizController implements QuizControllerDocs {
     private final ConceptService conceptService;
     private final StatsService statsService;
     private final WeaknessService weaknessService;
+    private final UserGradeService userGradeService;
     private final AiProviderFactory providerFactory;
     private final SecurityUtils securityUtils;
 
@@ -113,6 +116,6 @@ public class QuizController implements QuizControllerDocs {
     public ResponseEntity<com.rmrdo.devforge.application.dto.response.UserRankDto> getUserRank(
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         UUID userId = securityUtils.extractUserIdStrict(authHeader);
-        return ResponseEntity.ok(statsService.getUserRank(userId));
+        return ResponseEntity.ok(userGradeService.getUserGrade(userId));
     }
 }

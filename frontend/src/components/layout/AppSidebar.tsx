@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchApi } from "@/lib/apiClient";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Book02Icon,
@@ -21,6 +23,13 @@ export const AppSidebar: React.FC<{ children?: React.ReactNode }> = ({ children 
   const location = useLocation();
   const { user, logout } = useAuthStore();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const { data: userGrade } = useQuery({
+    queryKey: ["user-grade", user?.id],
+    queryFn: () => fetchApi<{ rank: string; rankTitle: string; totalXp: number }>("/users/me/grade"),
+    enabled: Boolean(user),
+    staleTime: 60_000,
+  });
 
   const navItems = [
     { label: "퀴즈 생성 & 풀이", path: "/quiz", icon: SparklesIcon },
@@ -78,18 +87,25 @@ export const AppSidebar: React.FC<{ children?: React.ReactNode }> = ({ children 
           {user ? (
             <div className="flex items-center justify-between rounded-xl bg-slate-800/50 p-3">
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 font-bold text-xs text-white">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 font-bold text-xs text-white shrink-0">
                   {user.name ? user.name[0] : "U"}
                 </div>
                 <div className="min-w-0">
-                  <p className="truncate text-xs font-bold text-slate-200">{user.name}</p>
-                  <p className="truncate text-[10px] text-slate-400">{user.email}</p>
+                  <div className="flex items-center gap-1.5">
+                    <p className="truncate text-xs font-bold text-slate-200">{user.name}</p>
+                    {userGrade && (
+                      <span className="inline-flex items-center rounded-full bg-indigo-500/20 px-1.5 py-0.5 text-[9px] font-black text-indigo-300 border border-indigo-500/30 shrink-0">
+                        {userGrade.rank}
+                      </span>
+                    )}
+                  </div>
+                  <p className="truncate text-[10px] text-slate-400">{userGrade?.rankTitle || user.email}</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={logout}
-                className="text-[11px] font-extrabold text-slate-400 hover:text-rose-400 transition-colors"
+                className="text-[11px] font-extrabold text-slate-400 hover:text-rose-400 transition-colors ml-1 shrink-0"
               >
                 로그아웃
               </button>
