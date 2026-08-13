@@ -7,7 +7,7 @@ on:
     paths:
       - "backend/**"
       - "frontend/**"
-      - "infra/app/**"
+      - "infra/**"
       - ".github/workflows/terraform-deploy.yml"
   push:
     branches:
@@ -15,7 +15,7 @@ on:
     paths:
       - "backend/**"
       - "frontend/**"
-      - "infra/app/**"
+      - "infra/**"
       - ".github/workflows/terraform-deploy.yml"
   workflow_dispatch:
 
@@ -111,7 +111,7 @@ jobs:
     name: Apply
     needs: plan
     runs-on: ubuntu-latest
-    environment: production
+    # environment: production
     if: github.event_name == 'push' && github.ref == 'refs/heads/deploy'
 
     steps:
