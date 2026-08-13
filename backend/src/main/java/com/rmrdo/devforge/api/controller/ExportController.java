@@ -1,5 +1,6 @@
 package com.rmrdo.devforge.api.controller;
 
+import com.rmrdo.devforge.api.controller.docs.ExportControllerDocs;
 import com.rmrdo.devforge.application.service.ExportService;
 import com.rmrdo.devforge.infrastructure.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +13,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/export")
+@RequestMapping("/api/v1/export")
 @RequiredArgsConstructor
-/** 북마크 문제 및 학습 노트를 Markdown 및 PDF/HTML 파일로 내보내는 REST API */
-public class ExportController {
+public class ExportController implements ExportControllerDocs {
 
     private final ExportService exportService;
     private final SecurityUtils securityUtils;

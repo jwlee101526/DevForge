@@ -20,7 +20,7 @@ export interface SocialProviderDto {
 }
 
 export const fetchSocialProvidersApi = async (): Promise<SocialProviderDto[]> => {
-  return fetchApi<SocialProviderDto[]>("/api/auth/social/providers");
+  return fetchApi<SocialProviderDto[]>("/auth/social/providers");
 };
 
 export const socialLoginApi = async (
@@ -31,7 +31,7 @@ export const socialLoginApi = async (
   name?: string,
   providerId?: string
 ): Promise<AuthResponseDto> => {
-  return fetchApi<AuthResponseDto>("/api/auth/social/login", {
+  return fetchApi<AuthResponseDto>("/auth/social/login", {
     method: "POST",
     body: JSON.stringify({
       provider,

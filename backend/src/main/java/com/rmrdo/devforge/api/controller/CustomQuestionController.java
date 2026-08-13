@@ -1,5 +1,6 @@
 package com.rmrdo.devforge.api.controller;
 
+import com.rmrdo.devforge.api.controller.docs.CustomQuestionControllerDocs;
 import com.rmrdo.devforge.application.service.CustomQuestionService;
 import com.rmrdo.devforge.domain.entity.Concept;
 import com.rmrdo.devforge.infrastructure.security.SecurityUtils;
@@ -11,10 +12,9 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/questions/custom")
+@RequestMapping("/api/v1/questions/custom")
 @RequiredArgsConstructor
-/** 사용자가 직접 작성하는 자작 문제 출제 REST API를 제공한다. */
-public class CustomQuestionController {
+public class CustomQuestionController implements CustomQuestionControllerDocs {
 
     private final CustomQuestionService customQuestionService;
     private final SecurityUtils securityUtils;

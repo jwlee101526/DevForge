@@ -1,5 +1,6 @@
 package com.rmrdo.devforge.api.controller;
 
+import com.rmrdo.devforge.api.controller.docs.ScenarioControllerDocs;
 import com.rmrdo.devforge.application.service.ScenarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -8,10 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/scenario")
+@RequestMapping("/api/v1/scenario")
 @RequiredArgsConstructor
-/** 실시간 모의 면접 및 꼬리질문 시나리오 모드 REST API를 제공한다. */
-public class ScenarioController {
+public class ScenarioController implements ScenarioControllerDocs {
 
     private final ScenarioService scenarioService;
 

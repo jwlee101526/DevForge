@@ -1,5 +1,6 @@
 package com.rmrdo.devforge.api.controller;
 
+import com.rmrdo.devforge.api.controller.docs.NotificationControllerDocs;
 import com.rmrdo.devforge.application.service.NotificationService;
 import com.rmrdo.devforge.domain.entity.DailyNotificationSubscription;
 import com.rmrdo.devforge.infrastructure.security.SecurityUtils;
@@ -11,10 +12,9 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/notifications")
+@RequestMapping("/api/v1/notifications")
 @RequiredArgsConstructor
-/** 데일리 복습 푸시 알림 설정 및 트리거 REST API */
-public class NotificationController {
+public class NotificationController implements NotificationControllerDocs {
 
     private final NotificationService notificationService;
     private final SecurityUtils securityUtils;

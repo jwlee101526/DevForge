@@ -1,5 +1,6 @@
 package com.rmrdo.devforge.api.controller;
 
+import com.rmrdo.devforge.api.controller.docs.CodeSandboxControllerDocs;
 import com.rmrdo.devforge.application.service.CodeSandboxService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -9,10 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/sandbox")
+@RequestMapping("/api/v1/sandbox")
 @RequiredArgsConstructor
-/** 실시간 코드 샌드박스 컴파일 및 테스트 실행 REST API */
-public class CodeSandboxController {
+public class CodeSandboxController implements CodeSandboxControllerDocs {
 
     private final CodeSandboxService sandboxService;
 

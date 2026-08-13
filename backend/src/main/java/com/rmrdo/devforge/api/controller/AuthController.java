@@ -1,5 +1,6 @@
 package com.rmrdo.devforge.api.controller;
 
+import com.rmrdo.devforge.api.controller.docs.AuthControllerDocs;
 import com.rmrdo.devforge.application.dto.request.LoginRequest;
 import com.rmrdo.devforge.application.dto.request.SignupRequest;
 import com.rmrdo.devforge.application.dto.response.AuthResponse;
@@ -14,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthControllerDocs {
 
     private final AuthService authService;
     private final JwtTokenProvider tokenProvider;

@@ -1,5 +1,6 @@
 package com.rmrdo.devforge.api.controller;
 
+import com.rmrdo.devforge.api.controller.docs.WorkbookControllerDocs;
 import com.rmrdo.devforge.application.service.WorkbookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -9,10 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/workbooks")
+@RequestMapping("/api/v1/workbooks")
 @RequiredArgsConstructor
-/** 정해진 문제집(문제 세트) 및 LLM 변형 문제 출제 REST API를 제공한다. */
-public class WorkbookController {
+public class WorkbookController implements WorkbookControllerDocs {
 
     private final WorkbookService workbookService;
 

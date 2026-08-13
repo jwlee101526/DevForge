@@ -25,7 +25,7 @@ export const ScenarioInterviewPage: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch("/api/scenario/start", {
+      const res = await fetch("/api/v1/scenario/start", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ techStack }),
@@ -55,7 +55,7 @@ export const ScenarioInterviewPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/scenario/followup", {
+      const res = await fetch("/api/v1/scenario/followup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sessionId, question: currentQuestion, userAnswer: answerText }),

@@ -1,5 +1,6 @@
 package com.rmrdo.devforge.api.controller;
 
+import com.rmrdo.devforge.api.controller.docs.BookmarkControllerDocs;
 import com.rmrdo.devforge.application.service.BookmarkService;
 import com.rmrdo.devforge.domain.entity.BookmarkGroup;
 import com.rmrdo.devforge.domain.entity.BookmarkedQuestion;
@@ -13,10 +14,9 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/bookmarks")
+@RequestMapping("/api/v1/bookmarks")
 @RequiredArgsConstructor
-/** 선호 문제 책갈피(북마크) 및 그룹 관리 REST API를 제공한다. */
-public class BookmarkController {
+public class BookmarkController implements BookmarkControllerDocs {
 
     private final BookmarkService bookmarkService;
     private final SecurityUtils securityUtils;

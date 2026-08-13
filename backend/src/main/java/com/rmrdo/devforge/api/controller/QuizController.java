@@ -1,5 +1,6 @@
 package com.rmrdo.devforge.api.controller;
 
+import com.rmrdo.devforge.api.controller.docs.QuizControllerDocs;
 import com.rmrdo.devforge.application.dto.request.QuizGenerateRequest;
 import com.rmrdo.devforge.application.dto.request.QuizGradeRequest;
 import com.rmrdo.devforge.application.dto.request.SaveConceptRequest;
@@ -22,10 +23,9 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/quiz")
+@RequestMapping("/api/v1/quiz")
 @RequiredArgsConstructor
-/** 퀴즈 생성·채점과 개념·통계 조회 API를 제공하며, 사용자 인증 헤더를 처리한다. */
-public class QuizController {
+public class QuizController implements QuizControllerDocs {
 
     private final QuizService quizService;
     private final ConceptService conceptService;

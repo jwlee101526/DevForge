@@ -10,7 +10,7 @@ import type {
 
 import { useAuthStore } from "@/lib/authStore";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api/v1";
 
 async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const { token } = useAuthStore.getState();

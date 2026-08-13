@@ -23,7 +23,7 @@ export const CustomQuestionCreatePage: React.FC = () => {
     setSuccessMsg("");
 
     try {
-      const res = await fetch("/api/questions/custom", {
+      const res = await fetch("/api/v1/questions/custom", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ word: word.trim(), korean: korean.trim(), example: example.trim(), tag: tag.trim() }),

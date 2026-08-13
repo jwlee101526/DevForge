@@ -24,7 +24,7 @@ export const WorkbookPage: React.FC = () => {
   const [fetchingQuestions, setFetchingQuestions] = useState(false);
 
   useEffect(() => {
-    fetch("/api/workbooks")
+    fetch("/api/v1/workbooks")
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => setWorkbooks(data))
       .catch((err) => console.error("Failed to load workbooks", err))
@@ -35,7 +35,7 @@ export const WorkbookPage: React.FC = () => {
     setActiveWorkbook(wb);
     setFetchingQuestions(true);
     try {
-      const res = await fetch(`/api/workbooks/${wb.id}/questions?tweakWithLlm=${tweak}`);
+      const res = await fetch(`/api/v1/workbooks/${wb.id}/questions?tweakWithLlm=${tweak}`);
       if (res.ok) {
         const json = await res.json();
         setQuestions(json.questions || []);

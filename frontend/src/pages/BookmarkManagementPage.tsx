@@ -96,15 +96,15 @@ export const BookmarkManagementPage: React.FC = () => {
           </div>
           <div className="flex items-center gap-2">
             <a
-              href={`/api/export/markdown${selectedGroupId ? `?groupId=${selectedGroupId}` : ''}`}
+              href={`/api/v1/export/markdown${selectedGroupId ? `?groupId=${selectedGroupId}` : ''}`}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors shadow-xs"
             >
               📥 Markdown 다운로드
             </a>
             <a
-              href={`/api/export/html${selectedGroupId ? `?groupId=${selectedGroupId}` : ''}`}
+              href={`/api/v1/export/html${selectedGroupId ? `?groupId=${selectedGroupId}` : ''}`}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl border border-indigo-200 bg-indigo-50 text-xs font-bold text-indigo-700 hover:bg-indigo-100 transition-colors shadow-xs"
