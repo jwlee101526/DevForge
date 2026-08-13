@@ -4,6 +4,7 @@ import BookmarkManagementPage from "@/pages/BookmarkManagementPage";
 import CustomQuestionCreatePage from "@/pages/CustomQuestionCreatePage";
 import IncorrectRetryPage from "@/pages/IncorrectRetryPage";
 import LandingPage from "@/pages/LandingPage";
+import LearningReportPage from "@/pages/LearningReportPage";
 import LoginPage from "@/pages/LoginPage";
 import QuestionExplorerPage from "@/pages/QuestionExplorerPage";
 import QuizPage from "@/pages/QuizPage";
@@ -29,7 +30,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/workbook" element={<WorkbookPage />} />
         <Route path="/interview" element={<ScenarioInterviewPage />} />
         <Route path="/sparring" element={<SparringPage />} />
-        <Route path="/stats" element={<QuizPage />} />
+        <Route path="/stats" element={<LearningReportPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

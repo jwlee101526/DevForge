@@ -4,15 +4,16 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Book02Icon,
   Bookmark02Icon,
+  BookBookmark01Icon,
   ChartHistogramIcon,
-  CodeIcon,
+  DeveloperIcon,
   Menu01Icon,
   RefreshIcon,
   SparklesIcon,
   UserIcon,
+  ZapIcon,
   Cancel01Icon,
 } from "@hugeicons/core-free-icons";
-import { Badge } from "@/components/ui/badge";
 import { useAuthStore } from "@/lib/authStore";
 import { cn } from "@/lib/utils";
 
@@ -26,11 +27,10 @@ export const AppSidebar: React.FC<{ children?: React.ReactNode }> = ({ children 
     { label: "유형별 문제 모아보기", path: "/questions", icon: Book02Icon },
     { label: "책갈피 관리", path: "/bookmarks", icon: Bookmark02Icon },
     { label: "오답 다시 풀기", path: "/retry", icon: RefreshIcon },
-    { label: "엄선 개발 문제집", path: "/workbook", icon: Book02Icon },
-    { label: "시나리오 모의면접", path: "/interview", icon: SparklesIcon },
-    { label: "1:1 라이브 면접 스파링", path: "/sparring", icon: SparklesIcon },
+    { label: "엄선 개발 문제집", path: "/workbook", icon: BookBookmark01Icon },
+    { label: "시나리오 모의면접", path: "/interview", icon: UserIcon },
+    { label: "1:1 라이브 면접 스파링", path: "/sparring", icon: ZapIcon },
     { label: "약점 & 학습 리포트", path: "/stats", icon: ChartHistogramIcon },
-    { label: "API 명세 (Scalar)", path: "/docs", icon: CodeIcon, isExternal: true },
   ];
 
   return (
@@ -40,7 +40,7 @@ export const AppSidebar: React.FC<{ children?: React.ReactNode }> = ({ children 
         {/* Brand Header */}
         <div className="flex items-center gap-3 px-6 py-5 border-b border-slate-800/80">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 font-black text-xl text-white shadow-lg shadow-indigo-600/30">
-            ⚡
+            <HugeiconsIcon icon={DeveloperIcon} className="h-6 w-6 text-white" />
           </div>
           <div>
             <h1 className="text-lg font-black tracking-tight text-white leading-none">DevForge</h1>
@@ -52,21 +52,6 @@ export const AppSidebar: React.FC<{ children?: React.ReactNode }> = ({ children 
         <nav className="flex-1 space-y-1.5 px-3 py-4 overflow-y-auto">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
-            if (item.isExternal) {
-              return (
-                <a
-                  key={item.path}
-                  href={item.path}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-bold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition-all"
-                >
-                  <HugeiconsIcon icon={item.icon} className="h-4 w-4 text-slate-400" />
-                  <span className="flex-1">{item.label}</span>
-                  <Badge className="border-0 bg-indigo-500/20 text-indigo-300 text-[10px]">Scalar</Badge>
-                </a>
-              );
-            }
             return (
               <Link
                 key={item.path}
