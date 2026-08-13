@@ -3,7 +3,7 @@ locals {
   resource_prefix    = "${local.normalized_project}-${var.environment}"
   jar_name           = basename(var.package_path)
   agy_path           = "/home/.local/bin/agy"
-  startup_command    = "java --enable-native-access=ALL-UNNAMED -cp /home/site/wwwroot org.springframework.boot.loader.launch.JarLauncher"
+  startup_command    = "java --enable-native-access=ALL-UNNAMED -jar /home/site/wwwroot/${local.jar_name}"
 
   default_app_settings = {
     AI_PROVIDER_DEFAULT                 = "Antigravity"
