@@ -9,8 +9,9 @@ import type {
 } from "../types/quiz";
 
 import { useAuthStore } from "@/lib/authStore";
+import { API_V1_BASE } from "@/lib/apiClient";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api/v1";
+const API_BASE = API_V1_BASE;
 
 async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const { token } = useAuthStore.getState();

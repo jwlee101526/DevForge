@@ -1,6 +1,9 @@
 import { useAuthStore } from "@/lib/authStore";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api/v1";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+
+export const API_V1_BASE = `${BASE_URL}/api/v1`;
+export const API_V2_BASE = `${BASE_URL}/api/v2`;
 
 export async function fetchApi<T>(url: string, options?: RequestInit): Promise<T> {
   const { token } = useAuthStore.getState();
@@ -11,7 +14,11 @@ export async function fetchApi<T>(url: string, options?: RequestInit): Promise<T
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  const res = await fetch(`${API_BASE}${url}`, {
+  const fullUrl = url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/api/")
+    ? `${BASE_URL}${url}`
+    : `${API_V1_BASE}${url}`;
+
+  const res = await fetch(fullUrl, {
     ...options,
     headers: {
       ...headers,

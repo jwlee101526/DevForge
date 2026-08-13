@@ -1,6 +1,7 @@
 import type { User } from "@/lib/authStore";
+import { API_V1_BASE } from "@/lib/apiClient";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api/v1";
+const API_BASE = API_V1_BASE;
 
 export interface AuthApiResponse {
   token: string;

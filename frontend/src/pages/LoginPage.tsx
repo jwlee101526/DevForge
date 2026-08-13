@@ -6,7 +6,7 @@ import AuthCard from "@/components/auth/AuthCard";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { loginApi, socialLoginApi } from "@/features/auth/api/authApi";
+import { loginApi } from "@/features/auth/api/authApi";
 import { useAuthStore } from "@/lib/authStore";
 
 const REMEMBERED_EMAIL_KEY = "devforge.rememberedEmail";
@@ -183,17 +183,9 @@ export const LoginPage: React.FC = () => {
             <button
               type="button"
               disabled={loading}
-              onClick={async () => {
-                setLoading(true);
-                try {
-                  const data = await socialLoginApi("GITHUB", "demo_code", window.location.origin, "developer@github.com", "GitHub Developer", "gh-1001");
-                  setAuth(data.token, data.user);
-                  navigate("/quiz", { replace: true });
-                } catch (err) {
-                  setStatusError((err as Error).message);
-                } finally {
-                  setLoading(false);
-                }
+              onClick={() => {
+                const baseUrl = import.meta.env.VITE_API_BASE_URL || "";
+                window.location.href = `${baseUrl}/oauth2/authorization/github`;
               }}
               className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-slate-200 bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-colors shadow-xs cursor-pointer"
             >
@@ -203,17 +195,9 @@ export const LoginPage: React.FC = () => {
             <button
               type="button"
               disabled={loading}
-              onClick={async () => {
-                setLoading(true);
-                try {
-                  const data = await socialLoginApi("GOOGLE", "demo_code", window.location.origin, "developer@google.com", "Google Developer", "gg-2002");
-                  setAuth(data.token, data.user);
-                  navigate("/quiz", { replace: true });
-                } catch (err) {
-                  setStatusError((err as Error).message);
-                } finally {
-                  setLoading(false);
-                }
+              onClick={() => {
+                const baseUrl = import.meta.env.VITE_API_BASE_URL || "";
+                window.location.href = `${baseUrl}/oauth2/authorization/google`;
               }}
               className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-slate-200 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition-colors shadow-xs cursor-pointer"
             >
@@ -223,17 +207,9 @@ export const LoginPage: React.FC = () => {
             <button
               type="button"
               disabled={loading}
-              onClick={async () => {
-                setLoading(true);
-                try {
-                  const data = await socialLoginApi("KAKAO", "demo_code", window.location.origin, "kakao_user@kakao.com", "카카오 개발자", "kk-3003");
-                  setAuth(data.token, data.user);
-                  navigate("/quiz", { replace: true });
-                } catch (err) {
-                  setStatusError((err as Error).message);
-                } finally {
-                  setLoading(false);
-                }
+              onClick={() => {
+                const baseUrl = import.meta.env.VITE_API_BASE_URL || "";
+                window.location.href = `${baseUrl}/oauth2/authorization/kakao`;
               }}
               className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-yellow-300 bg-[#FEE500] text-slate-900 text-xs font-semibold hover:bg-[#FDD800] transition-colors shadow-xs cursor-pointer"
             >
