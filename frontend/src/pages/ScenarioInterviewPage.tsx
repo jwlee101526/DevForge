@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import AppSidebar from "@/components/layout/AppSidebar";
+import { fetchApi } from "@/lib/apiClient";
 
 interface InterviewTurn {
   role: "interviewer" | "user";
