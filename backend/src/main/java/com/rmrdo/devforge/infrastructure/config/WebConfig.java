@@ -26,7 +26,15 @@ public class WebConfig implements WebMvcConfigurer {
                         if (requestedResource.exists() && requestedResource.isReadable()) {
                             return requestedResource;
                         }
-                        return new ClassPathResource("/static/index.html");
+                        // API, assets, 또는 확장에 점(.)이 있는 정적 리소스 요청은 SPA Fallback(index.html) 대상에서 제외
+                        if (resourcePath.startsWith("api/") || resourcePath.startsWith("assets/") || resourcePath.contains(".")) {
+                            return null;
+                        }
+                        Resource indexResource = new ClassPathResource("/static/index.html");
+                        if (indexResource.exists() && indexResource.isReadable()) {
+                            return indexResource;
+                        }
+                        return null;
                     }
                 });
     }
