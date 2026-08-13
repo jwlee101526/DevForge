@@ -149,6 +149,17 @@ public class QuizService {
                     stat.correct++;
                 }
 
+                String answerExplanation = explanation;
+                if (!correct) {
+                    if ("choice".equals(question.answerFormat())) {
+                        String userChoice = answer != null && answer.choiceId() != null && !answer.choiceId().isBlank() ? answer.choiceId() : "미제출";
+                        answerExplanation = "제출하신 답변 [" + userChoice + "]번은 오답입니다. (정답: " + correctChoiceId + "번)\n" + explanation;
+                    } else {
+                        String userText = answer != null && answer.textAnswer() != null && !answer.textAnswer().isBlank() ? answer.textAnswer() : "미제출";
+                        answerExplanation = "작성하신 답변 '" + userText + "'은(는) 요구하는 정답과 일치하지 않는 오답입니다.\n정답: " + (correctText != null ? correctText : "지정 정답") + "\n" + explanation;
+                    }
+                }
+
                 results.add(new QuizGradeResponse.QuestionResultDto(
                         question.id(),
                         correct ? "correct" : "incorrect",
@@ -156,7 +167,7 @@ public class QuizService {
                         correctText,
                         correctText == null ? List.of() : List.of(correctText),
                         explanation,
-                        explanation,
+                        answerExplanation,
                         Map.of(),
                         null,
                         !correct,

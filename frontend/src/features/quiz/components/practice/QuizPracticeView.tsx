@@ -150,18 +150,34 @@ export const QuizPracticeView: React.FC<QuizPracticeViewProps> = ({
               </div>
             </div>
 
-            <div className="space-y-5">
-              <h3 className="text-lg font-extrabold leading-8 text-slate-900">
-                {question.prompt}
-              </h3>
-              {question.passage && (
-                <CodePassage
-                  passage={question.passage}
-                  targetWord={question.target_word}
-                  isCodeType={normalizedType === "context_choice" || normalizedType === "usage_choice"}
-                />
-              )}
+            {(() => {
+              const hasCodeInPrompt = !question.passage && question.prompt.includes("```");
+              let displayPrompt = question.prompt;
+              let passageContent = question.passage;
 
+              if (hasCodeInPrompt) {
+                const parts = question.prompt.split(/(```[\s\S]*?```)/g);
+                displayPrompt = parts[0]?.trim() || question.prompt;
+                passageContent = parts.find((p) => p.startsWith("```")) || "";
+              }
+
+              return (
+                <div className="space-y-5">
+                  <h3 className="text-lg font-extrabold leading-8 text-slate-900">
+                    {displayPrompt}
+                  </h3>
+                  {passageContent && (
+                    <CodePassage
+                      passage={passageContent}
+                      targetWord={question.target_word}
+                      isCodeType={normalizedType === "context_choice" || normalizedType === "usage_choice" || hasCodeInPrompt}
+                    />
+                  )}
+                </div>
+              );
+            })()}
+
+            <div className="space-y-5 mt-5">
               {question.answer_format === "choice" ? (
                 <QuestionChoiceList
                   questionId={question.id}
