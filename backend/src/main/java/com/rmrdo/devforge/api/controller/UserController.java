@@ -1,5 +1,6 @@
 package com.rmrdo.devforge.api.controller;
 
+import com.rmrdo.devforge.api.controller.docs.UserControllerDocs;
 import com.rmrdo.devforge.application.dto.response.UserRankDto;
 import com.rmrdo.devforge.application.service.UserGradeService;
 import com.rmrdo.devforge.infrastructure.security.SecurityUtils;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UserControllerDocs {
 
     private final UserGradeService userGradeService;
     private final SecurityUtils securityUtils;
@@ -26,6 +27,7 @@ public class UserController {
      * @param authHeader Authorization 헤더 (JWT 토큰)
      * @return 사용자 등급 응답 (UserRankDto)
      */
+    @Override
     @GetMapping("/me/grade")
     public ResponseEntity<UserRankDto> getMyGrade(
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
